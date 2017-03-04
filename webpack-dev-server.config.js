@@ -37,6 +37,7 @@ const config = {
   ],
   module: {
     loaders: [
+      { test: /\.json$/, loader: 'json' },
       {
         test: /\.js$/, // All .js files
         loaders: ['babel-loader'],
