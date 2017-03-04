@@ -28,9 +28,6 @@ contract('AbieFund', function(accounts) {
 
   it("publish a proposal to become a member", function() {
 
-// 4 membres
-// 1 membre set delegate pour AddMember
-
     var member1 = accounts[0];
     var member2 = accounts[1];
     var member3 = accounts[2];
@@ -48,6 +45,8 @@ contract('AbieFund', function(accounts) {
       assert.equal(result[3], candidate );
     });
   });
+
+
 
 
 /*
