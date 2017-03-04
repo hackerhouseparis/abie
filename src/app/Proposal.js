@@ -1,5 +1,8 @@
 import React, {Component} from 'react'
 import request from 'superagent'
+import { default as Web3 } from 'web3'
+import { default as contract } from 'truffle-contract'
+import MetaCoin from '../../build/contracts/MetaCoin.json'
 
 import '../www/styles/Proposal.scss'
 

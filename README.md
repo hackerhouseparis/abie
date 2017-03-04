@@ -1,21 +1,16 @@
-# Universal Voucher - Backoffice
+# Abie
 
-## Installation
+## Test smart contract
 
-After cloning the repository, install dependencies:
-```sh
-cd <project folder>/
-npm install
+```
+truffle compile
+truffle migrate
+truffle test
 ```
 
-Now you can run your local server:
-```sh
+## Run dapp
+
+```
+npm i
 npm start
-```
-Server is located at http://localhost:3000
-
-Note: To allow external viewing of the demo, change the following value in `webpack-dev-server.config.js`
-
-```
-host: 'localhost'  //Change to '0.0.0.0' for external facing server
 ```
