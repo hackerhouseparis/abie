@@ -13,11 +13,11 @@ contract('AbieFund', function(accounts) {
 
     var abieFund;
     return AbieFund.deployed([member1,member2,member3,member4]).then(function(instance) {
-      abieFund = instance;
       // member 2 set delegate for AddMember to member 1
+      abieFund = instance;
       return abieFund.setDelegate(0,member1,{from: member2});
     }).then(function() {
-      // veirfy
+      // verify
       return abieFund.getDelegate.call(member2,0);
     }).then(function(result) {
       console.log("res ",result);

@@ -6,7 +6,7 @@ contract AbieFund {
     
     uint membershipFee=0.1 ether;
 
-    event Donated(address donor, uint amount);
+    event Donated(address indexed donor, uint amount);
     
     enum ProposalType {AddMember,FundProject} // Different types of proposals.
 
