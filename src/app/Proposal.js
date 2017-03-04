@@ -14,6 +14,8 @@ class Proposal extends Component {
   state = {
     web3: false,
     balance: 0,
+    addressContract: null,
+    delegate: null
   }
 
   componentDidMount() {
@@ -26,23 +28,32 @@ class Proposal extends Component {
         let provider = new Web3.providers.HttpProvider(`http://${TESTRPC_HOST}:${TESTRPC_PORT}`)
         let metaCoinBalance = 0
         meta.setProvider(provider)
-        meta.deployed(['0x77282410cee8ee341510d966fa33845c1859e1f0', '0x63f2b18dced715721520d9a024886c7797be9e0e'])
-          .then((instance) => {
-            let contract = instance;
-            testAbie = `Metacoin address: ${instance.address}`
-            return contract.setDelegate(0,'0x77282410cee8ee341510d966fa33845c1859e1f0',{from: '0x77282410cee8ee341510d966fa33845c1859e1f0'})
-          // }).then((result) => {
-          //   this.setState({balance: result.toNumber()})
-          //   return contract.setDelegate(0,'0x77282410cee8ee341510d966fa33845c1859e1f0',{from: '0x77282410cee8ee341510d966fa33845c1859e1f0'})
-          }).then((result) => {
-            console.log(result)
-          }).catch(function(err) {
-            console.error(err)
-          });
+        return meta.deployed([
+          '0x77282410cee8ee341510d966fa33845c1859e1f0',
+          '0x63f2b18dced715721520d9a024886c7797be9e0e',
+        ]).then((contract) => {
+          this.setState({addressContract: contract.address})
+          console.log(this.state)
+          return contract.setDelegate(
+            0,
+            '0x77282410cee8ee341510d966fa33845c1859e1f0',
+            {from: '0x77282410cee8ee341510d966fa33845c1859e1f0'}
+          )}
+        ).then((result) => console.log(result)).catch((err) => {
+          console.error(err);
+        })
       } else {
         alert("install Metamask or use Mist");
       }
     }, 1000)
+  }
+
+  handleChangeDelegate = (event) => {
+    this.setState({delegate: event.target.value});
+  }
+
+  setDelegate = (address) => {
+    this.state.meta.at(this.state.addressContract)
   }
 
   render() {
@@ -51,6 +62,9 @@ class Proposal extends Component {
         <h1>Abie</h1>
         <ul>
           <li>Balance : {this.state.balance}</li>
+        </ul>
+        <ul>
+          <li>Set Delegate <input type="text" onChange={this.handleChangeDelegate} /><button onClick={this.setDelegate}>Submit address</button></li>
         </ul>
       </div>
     )
