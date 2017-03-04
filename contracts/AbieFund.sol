@@ -2,7 +2,7 @@
 TODO: Set a license.
 */
 
-pragma solidity ^0.4.9;
+pragma solidity ^0.4.8;
 
 /// @title Fund for donations.
 contract AbieFund {
