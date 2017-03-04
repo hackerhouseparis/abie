@@ -32,27 +32,14 @@ class Proposal extends Component {
         let metaCoinBalance = 0
         meta.setProvider(provider)
         const web3RPC = new Web3(provider)
-            // Get accounts.
-        web3RPC.eth.getAccounts(function(error, acc) {
-        return meta.deployed()
-          .then((contract) => {
-            this.setState({addressContract: contract.address})
-            console.log(this.state)
-            return contract.setDelegate(
-              0,
-              acc[0],
-              {from: acc[1]}
-            )}
-          )
-          .then((result) => console.log(result))
-          .catch((err) => {
-            console.error(err);
-          })
+        // Get accounts.
+        web3RPC.eth.getAccounts((err, acc) => {
+          console.log(err)
           console.log(acc)
+          return meta.deployed()
+            .then((contract) => this.setState({addressContract: contract.address}))
+            .catch((err) => console.error(err))
         })
-
-
-
       } else {
         alert("install Metamask or use Mist");
       }
