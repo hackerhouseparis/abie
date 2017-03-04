@@ -35,24 +35,27 @@ https://github.com/ipfs/awesome-ipfs#single-page-webapps
 
 ## Code 
 
-```
-/* Part of this contract is from the solidity documentation
-TODO: Set a license.
-*/
 
-pragma solidity ^0.4.8;
+### Variables de configurations:
 
-/// @title Voting with delegation.
-contract AbieFund {
-    
+```javascript
+
     uint membershipFee = 0.1 ether;
     uint nbMembers;
     uint registrationTime = 1 years;
 
     uint8 public test = 8; // temp for test purpose
 
+```
+
+### Event
+
+```javascript
     event Donated(address donor, uint amount);
-    
+```
+this is the definition of the notification which is triggered when a donation occured. 
+
+```javascript
     enum ProposalType {AddMember,FundProject} // Different types of proposals.
     enum VoteType {Abstain,Yes,No} // Different value of a vote.
 
