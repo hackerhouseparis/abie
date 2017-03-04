@@ -17,6 +17,7 @@ class Proposal extends Component {
     addressContract: null,
     delegate: null,
     metaContract: null,
+    accounts:null
   }
 
   componentDidMount() {
@@ -30,23 +31,28 @@ class Proposal extends Component {
         let provider = new Web3.providers.HttpProvider(`http://${TESTRPC_HOST}:${TESTRPC_PORT}`)
         let metaCoinBalance = 0
         meta.setProvider(provider)
-        return meta.deployed([
-          '0x77282410cee8ee341510d966fa33845c1859e1f0',
-          '0x63f2b18dced715721520d9a024886c7797be9e0e',
-        ])
-        .then((contract) => {
-          this.setState({addressContract: contract.address})
-          console.log(this.state)
-          return contract.setDelegate(
-            0,
-            '0x77282410cee8ee341510d966fa33845c1859e1f0',
-            {from: '0x77282410cee8ee341510d966fa33845c1859e1f0'}
-          )}
-        )
-        .then((result) => console.log(result))
-        .catch((err) => {
-          console.error(err);
+        const web3RPC = new Web3(provider)
+            // Get accounts.
+        web3RPC.eth.getAccounts(function(error, acc) {
+        return meta.deployed()
+          .then((contract) => {
+            this.setState({addressContract: contract.address})
+            console.log(this.state)
+            return contract.setDelegate(
+              0,
+              acc[0],
+              {from: acc[1]}
+            )}
+          )
+          .then((result) => console.log(result))
+          .catch((err) => {
+            console.error(err);
+          })
+          console.log(acc)
         })
+
+
+
       } else {
         alert("install Metamask or use Mist");
       }
