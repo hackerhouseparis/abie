@@ -15,7 +15,8 @@ class Proposal extends Component {
     web3: false,
     balance: 0,
     addressContract: null,
-    delegate: null
+    delegate: null,
+    metaContract: null,
   }
 
   componentDidMount() {
@@ -25,13 +26,15 @@ class Proposal extends Component {
         // web3 = new Web3(web3.currentProvider);
         this.setState({web3: true})
         let meta = contract(AbieFund)
+        this.setState({metaContract: meta})
         let provider = new Web3.providers.HttpProvider(`http://${TESTRPC_HOST}:${TESTRPC_PORT}`)
         let metaCoinBalance = 0
         meta.setProvider(provider)
         return meta.deployed([
           '0x77282410cee8ee341510d966fa33845c1859e1f0',
           '0x63f2b18dced715721520d9a024886c7797be9e0e',
-        ]).then((contract) => {
+        ])
+        .then((contract) => {
           this.setState({addressContract: contract.address})
           console.log(this.state)
           return contract.setDelegate(
@@ -39,7 +42,9 @@ class Proposal extends Component {
             '0x77282410cee8ee341510d966fa33845c1859e1f0',
             {from: '0x77282410cee8ee341510d966fa33845c1859e1f0'}
           )}
-        ).then((result) => console.log(result)).catch((err) => {
+        )
+        .then((result) => console.log(result))
+        .catch((err) => {
           console.error(err);
         })
       } else {
@@ -53,7 +58,16 @@ class Proposal extends Component {
   }
 
   setDelegate = (address) => {
-    this.state.meta.at(this.state.addressContract)
+    this.state.metaContract.at(this.state.addressContract)
+      .then((contract) => contract.setDelegate(
+        0,
+        this.state.delegate,
+        {from: '0x77282410cee8ee341510d966fa33845c1859e1f0'}
+      ))
+      .then((result) => console.log(result))
+      .catch((err) => {
+        console.error(err);
+      })
   }
 
   render() {
@@ -64,7 +78,10 @@ class Proposal extends Component {
           <li>Balance : {this.state.balance}</li>
         </ul>
         <ul>
-          <li>Set Delegate <input type="text" onChange={this.handleChangeDelegate} /><button onClick={this.setDelegate}>Submit address</button></li>
+          <li>
+            Set Delegate <input type="text" onChange={this.handleChangeDelegate} />
+            <button onClick={this.setDelegate}>Submit address</button>
+          </li>
         </ul>
       </div>
     )
