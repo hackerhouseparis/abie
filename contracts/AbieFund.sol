@@ -3,11 +3,13 @@ pragma solidity ^0.4.8;
 
 /// @title Voting with delegation.
 contract AbieFund {
-    
+
     uint membershipFee=0.1 ether;
 
+    uint8 public test = 8;
+
     event Donated(address indexed donor, uint amount);
-    
+
     enum ProposalType {AddMember,FundProject} // Different types of proposals.
 
     struct Proposal
@@ -19,18 +21,18 @@ contract AbieFund {
         bytes32 data;       // data of the transaction.
         ProposalType proposalType;  // type of the proposal
     }
-    
-    
+
+
     struct Member
     {
         uint registration;  // date of registration, if 0 the member does not exist.
         address[2] delegate; // delegate[proposalType] gives the delegate for the type.
     }
-    
+
     mapping (address => Member) public members;
-    
+
     Proposal[] public proposals;
-    
+
     /// Require at least price to be paid.
     modifier costs(uint price) {
         if (msg.value<price)
@@ -43,7 +45,7 @@ contract AbieFund {
         for (uint i;i<initialMembers.length;++i)
             members[initialMembers[i]].registration=now;
     }
-    
+
     /** Choose a delegate.
       * @param proposalType 0 for AddMember, 1 for FundProject.
       * @param target account to delegate to.
@@ -57,7 +59,7 @@ contract AbieFund {
     function () payable {
         Donated(msg.sender, msg.value);
     }
-    
+
     function askMembership () payable costs(membershipFee) {
         Donated(msg.sender,msg.value);
         proposals.push(Proposal({
@@ -71,13 +73,17 @@ contract AbieFund {
     }
 
     /// GETTERS ///
-    
+
     /** Return the delegate.
      *  @param member member to get the delegate from.
      *  @param proposalType 0 for AddMember, 1 for FundProject.
      */
     function getDelegate(address member, uint8 proposalType) constant returns (address){
         return members[member].delegate[proposalType];
+    }
+
+    function getTest() returns (uint8) {
+      return test;
     }
 
 }
@@ -95,12 +101,12 @@ contract AbieFund {
         address delegate; // person delegated to.
         uint vote;   // index of the voted proposal.
     }
-    
+
 
     // This declares a state variable that.
     // stores a `Voter` struct for each possible address.
     mapping(address => Voter) public voters;
-    
+
     // Give `voter` the right to vote on this ballot.
     // May only be called by `chairperson`.
     function giveRightToVote(address voter) {
