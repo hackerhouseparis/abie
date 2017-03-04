@@ -34,7 +34,7 @@ more examples:
 https://github.com/ipfs/awesome-ipfs#single-page-webapps
 
 ## Code 
-
+i
 
 ### Variables de configurations:
 
@@ -55,9 +55,24 @@ https://github.com/ipfs/awesome-ipfs#single-page-webapps
 ```
 this is the definition of the notification which is triggered when a donation occured. 
 
+### Enums
+
 ```javascript
     enum ProposalType {AddMember,FundProject} // Different types of proposals.
     enum VoteType {Abstain,Yes,No} // Different value of a vote.
+
+```
+Proposal is a generic type.
+AddMember : this proposal contain a vote to confirm a new voter
+FundProject: this type of proposal contain a vote to fund a project 
+
+VoteType
+This is the content of a single vote. a voter can either vote yes, no or abstain. (default: abstain)
+if a voter abstain, his vote goes to his delegate.
+
+### Structs
+
+```javascript
 
     struct Proposal
     {
@@ -71,14 +86,33 @@ this is the definition of the notification which is triggered when a donation oc
         mapping (address => VoteType) vote; // vote of the party.
         mapping (address => bool) voteCounted;
     }
-    
-    
+
+```
+
+A proposal represent either a proposal to confirm a new voter or a vote to fund a project.
+In the case of a project, the data should be the IPFS link of the description.
+
+Because of the liquid democratie, the vote are counted only after the deadline. That way, if someone did not vote, his delegate vote for him.
+
+when the vote are counted we follow a chained list, and we update the voteCounted array such that we always have voteYes + voteAbstain = #voteCounted. If we run out of fuel, we can run this function in multiples steps.
+At the end, voteYes + voteAbstain = #vote
+
+```javascript
+
     struct Member
     {
         uint registration;  // date of registration, if 0 the member does not exist.
         address[2] delegate; // delegate[proposalType] gives the delegate for the type.
     }
-    
+ ```
+
+A Member represent a voting Weight, given to a particular account. the owner of the account has the power to vote once for each proposal.
+If the member did not vote before the deadline for a proposal, his vote weight goes to another member called his delegate. (if he selected one).
+
+ It has two delegate, one for new members proposal, and one for fund proposals
+
+ ```javascript
+
     mapping (address => Member) public members;
     
     Proposal[] public proposals;
