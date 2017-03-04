@@ -39,13 +39,12 @@ contract('AbieFund', function(accounts) {
 
     var abieFund;
     return AbieFund.deployed([member1,member2,member3,member4]).then(function(instance) {
-      // member 2 set delegate for AddMember to member 1
       abieFund = instance;
       return abieFund.askMembership({value: web3.toWei(1, "ether") ,from: candidate});
     }).then(function() {
       return abieFund.proposals.call(0);
     }).then(function(result) {
-      console.log("res ",result[3]);
+      // result[3] => proposal.recipient
       assert.equal(result[3], candidate );
     });
   });
