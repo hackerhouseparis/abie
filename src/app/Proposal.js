@@ -27,13 +27,14 @@ class Proposal extends Component {
         // web3 = new Web3(web3.currentProvider);
         this.setState({web3: true})
         let meta = contract(AbieFund)
+        console.log("meta ",meta);
         this.setState({metaContract: meta})
         let provider = new Web3.providers.HttpProvider(`http://${TESTRPC_HOST}:${TESTRPC_PORT}`)
         let metaCoinBalance = 0
         meta.setProvider(provider)
         const web3RPC = new Web3(provider)
             // Get accounts.
-        web3RPC.eth.getAccounts(function(error, acc) {
+        web3RPC.eth.getAccounts((error, acc) => {
         return meta.deployed()
           .then((contract) => {
             this.setState({addressContract: contract.address})
@@ -50,8 +51,6 @@ class Proposal extends Component {
           })
           console.log(acc)
         })
-
-
 
       } else {
         alert("install Metamask or use Mist");
