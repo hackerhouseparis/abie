@@ -26,6 +26,7 @@ contract AbieFund {
         bytes32 data;       // data of the transaction.
         ProposalType proposalType;  // type of the proposal.
         mapping (address => VoteType) vote; // vote of the party.
+        mapping (address => bool) voteCounted;
     }
     
     
