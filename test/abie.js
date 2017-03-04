@@ -26,27 +26,31 @@ contract('AbieFund', function(accounts) {
   });
 
 
+  it("publish a proposal to become a member", function() {
 
-/*
-  it("should call a function that depends on a linked library", function() {
-    var meta;
-    var metaCoinBalance;
-    var metaCoinEthBalance;
+// 4 membres
+// 1 membre set delegate pour AddMember
 
-    return MetaCoin.deployed().then(function(instance) {
-      meta = instance;
-      return meta.getBalance.call(accounts[0]);
-    }).then(function(outCoinBalance) {
-      metaCoinBalance = outCoinBalance.toNumber();
-      return meta.getBalanceInEth.call(accounts[0]);
-    }).then(function(outCoinBalanceEth) {
-      metaCoinEthBalance = outCoinBalanceEth.toNumber();
+    var member1 = accounts[0];
+    var member2 = accounts[1];
+    var member3 = accounts[2];
+    var member4 = accounts[3];
+    var candidate = accounts[4];
+
+    var abieFund;
+    return AbieFund.deployed([member1,member2,member3,member4]).then(function(instance) {
+      abieFund = instance;
+      return abieFund.askMembership({value: web3.toWei(1, "ether") ,from: candidate});
     }).then(function() {
-      assert.equal(metaCoinEthBalance, 2 * metaCoinBalance, "Library function returned unexpected function, linkage may be broken");
+      return abieFund.proposals.call(0);
+    }).then(function(result) {
+      // result[3] => proposal.recipient
+      assert.equal(result[3], candidate );
     });
   });
 
 
+/*
 
   it("should send coin correctly", function() {
     var meta;

@@ -1,8 +1,12 @@
+/* Part of this contract is from the solidity documentation
+TODO: Set a license.
+*/
 
 pragma solidity ^0.4.8;
 
 /// @title Voting with delegation.
 contract AbieFund {
+<<<<<<< HEAD
 
     uint membershipFee=0.1 ether;
 
@@ -10,16 +14,29 @@ contract AbieFund {
 
     event Donated(address indexed donor, uint amount);
 
+=======
+    
+    uint membershipFee = 0.1 ether;
+    uint nbMembers;
+    uint registrationTime = 1 years;
+
+    event Donated(address donor, uint amount);
+    
+>>>>>>> e939cedaa7e669c88ad2c94b1df6ccfbbd4667cf
     enum ProposalType {AddMember,FundProject} // Different types of proposals.
+    enum VoteType {Abstain,Yes,No} // Different value of a vote.
 
     struct Proposal
     {
         bytes32 name;       // short name (up to 32 bytes).
-        uint voteCount;     // number of accumulated votes.
+        uint voteYes;     // number of YES votes.
+        uint voteAbstain;     // number of abstention. Number of No can be deduced.
         address recipient;     // address the funds will be sent.
         uint value;         // quantity of wei to be sent.
         bytes32 data;       // data of the transaction.
-        ProposalType proposalType;  // type of the proposal
+        ProposalType proposalType;  // type of the proposal.
+        mapping (address => VoteType) vote; // vote of the party.
+        mapping (address => bool) voteCounted;
     }
 
 
@@ -39,11 +56,21 @@ contract AbieFund {
             throw;
         _;
     }
+    
+    /// Require the caller to be a member.
+    modifier isMember() {
+        if (members[msg.sender].registration==0) // Not a member.
+            throw;
+        if (members[msg.sender].registration+registrationTime<now) // Has expired.
+            throw;
+        _;
+    }
 
     /// @param initialMembers First members of the organization.
     function AbieFund(address[] initialMembers) {
         for (uint i;i<initialMembers.length;++i)
             members[initialMembers[i]].registration=now;
+        nbMembers=initialMembers.length;
     }
 
     /** Choose a delegate.
@@ -61,16 +88,25 @@ contract AbieFund {
     }
 
     function askMembership () payable costs(membershipFee) {
-        Donated(msg.sender,msg.value);
+        Donated(msg.sender,msg.value); // Register the donation.
+        
+        // Create a proposal to add the member.
         proposals.push(Proposal({
         name: 0x0,
-        voteCount: 0,
+        voteYes: 0,
+        voteAbstain: 0,
         recipient: msg.sender,
         value: 0x0,
         data: 0x0,
         proposalType: ProposalType.AddMember
         }));
     }
+    
+    function vote (uint proposal, VoteType voteType) isMember {
+        // TODO
+    }
+    
+
 
     /// GETTERS ///
 
@@ -88,6 +124,7 @@ contract AbieFund {
 
 }
 
+<<<<<<< HEAD
 
 
 /*
@@ -203,3 +240,5 @@ contract AbieFund {
     }
 
 */
+=======
+>>>>>>> e939cedaa7e669c88ad2c94b1df6ccfbbd4667cf
