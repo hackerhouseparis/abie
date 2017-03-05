@@ -42,7 +42,7 @@ contract('AbieFund', function(accounts) {
       assert.equal(result[3], candidate )
     })
   })
-
+/*
   it("test vote", function() {
     var member1 = accounts[0]
     var member2 = accounts[1]
@@ -63,6 +63,6 @@ contract('AbieFund', function(accounts) {
       // result[3] => proposal.recipient
       assert.equal(result, 1 )
     })
-  })
+  })*/
 
 })

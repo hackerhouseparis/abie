@@ -75,10 +75,12 @@ class Proposal extends Component {
     this.state.metaContract.at(this.state.addressContract)
       .then((contract) => {
         console.log(contract)
+        console.log("web3",web3);
         return contract.askMembership(
         {
-          value: 2,
-          from: this.state.accounts[4]
+          value: web3.toWei(10, "ether"),
+          from: this.state.accounts[4],
+          gas: 4000000
         }
       )})
       .then((result) => console.log(result))
