@@ -7,10 +7,13 @@ pragma solidity ^0.4.8;
 /// @title Fund for donations.
 contract AbieFund {
     
-    uint membershipFee = 0.1 ether;
-    uint nbMembers;
-    uint registrationTime = 1 years;
-    uint[2] voteLength = [1 weeks, 1 weeks];
+    uint public membershipFee = 0.1 ether;
+    uint public nbMembers;
+    uint public registrationTime = 1 years;
+    uint[2] public voteLength = [1 weeks, 1 weeks];
+    uint MAX_DELEGATION_DEPTH=1000;
+    address NOT_COUNTED=0;
+    address COUNTED=1;
 
     event Donated(address donor, uint amount);
     
@@ -21,14 +24,15 @@ contract AbieFund {
     {
         bytes32 name;       // short name (up to 32 bytes).
         uint voteYes;     // number of YES votes.
-        uint voteAbstain;     // number of abstention. Number of No can be deduced.
+        uint voteNo;     // number of abstention. Number of No can be deduced.
         address recipient;     // address the funds will be sent.
         uint value;         // quantity of wei to be sent.
         bytes32 data;       // data of the transaction.
         ProposalType proposalType;  // type of the proposal.
         uint endDate; // when the vote will be closed.
+        address lastMemberCounted; // last one who was counted or NOT_COUNTED (if the count has not started) or COUNTED (if all the votes has been counted);
+        bool executed; // True if the proposal have been executed.
         mapping (address => VoteType) vote; // vote of the party.
-        mapping (address => bool) voteCounted; // has the vote been counted yet?
     }
     
     // Is also a node list.
@@ -37,7 +41,8 @@ contract AbieFund {
         uint registration;  // date of registration, if 0 the member does not exist.
         address[2] delegate; // delegate[proposalType] gives the delegate for the type.
         address prev;
-        address succ;
+        address succ; // This should not be deleted even when the member is.
+        uint proposalStoppedOnHim; // Number of proposals stopped on him.
     }
     
     mapping (address => Member) public members;
@@ -63,21 +68,11 @@ contract AbieFund {
     
     /// Require the caller to be a member.
     modifier isMember() {
-    
-        if (members[msg.sender].registration==0) // Not a member.
-            throw;
-        if (members[msg.sender].registration+registrationTime<now) // Has expired.
+        if(!isValidMember(msg.sender))
             throw;
         _;
     }
 
-/*
-function insertEnd(List list, Node newNode)
-     if list.lastNode == null
-         insertBeginning(list, newNode)
-     else
-         insertAfter(list, list.lastNode, newNode)
-*/
 
     /// @param initialMembers First members of the organization.
     function AbieFund(address[] initialMembers) {
@@ -106,7 +101,7 @@ function insertEnd(List list, Node newNode)
       * @param proposalType 0 for AddMember, 1 for FundProject.
       * @param target account to delegate to.
       */
-    function setDelegate(uint8 proposalType, address target) isMember
+    function setDelegate(uint8 proposalType, address target)
     {
         members[msg.sender].delegate[proposalType] = target;
     }
@@ -119,16 +114,19 @@ function insertEnd(List list, Node newNode)
     /// Ask membership of the fund.
     function askMembership () payable costs(membershipFee) {
         Donated(msg.sender,msg.value); // Register the donation.
+        
         // Create a proposal to add the member.
         proposals.push(Proposal({
         name: 0x0,
         voteYes: 0,
-        voteAbstain: 0,
+        voteNo: 0,
         recipient: msg.sender,
         value: 0x0,
         data: 0x0,
         proposalType: ProposalType.AddMember,
-        endDate: now + voteLength[uint256(ProposalType.AddMember)]
+        endDate: now + voteLength[uint256(ProposalType.AddMember)],
+        lastMemberCounted: 0,
+        executed: false
         }));
     }
     
@@ -142,58 +140,85 @@ function insertEnd(List list, Node newNode)
             throw;
         if (proposal.endDate < now) // Vote is over.
             throw;
+ 
         proposals[proposalID].vote[msg.sender] = voteType;
     }
     
-    /** Count all the votes of a proposal.
-     *  @param proposalID ID of the proposal to count votes from. 
+    /** Count all the votes. You can call this function if gas limit is not an issue.
+     *  @param proposalID ID of the proposal to count votes from.
      */
     function countAllVotes (uint proposalID) {
-        countVotes (proposalID, memberList.first, 0);
+        countVotes (proposalID,uint(-1));
     }
     
-    /** Count the votes from start to end.
+    /** Count up to max of the votes.
+     *  You may have to call this function multiple times if counting once reach the gas limit.
      *  This function is necessary to count in multiple times if counting reach gas limit.
      *  We just count the number of Yes and Abstention, so we will deduce the number of No.
      *  @param proposalID ID of the proposal to count votes from.
-     *  @param start First member to count from.
-     *  @param end   Count votes of all members before this one (end is not included), put to 0 to count till the end.
+     *  @param max maximum to count.
      */
-    function countVotes (uint proposalID, address start, address end) {
+    function countVotes (uint proposalID, uint max) {
         Proposal proposal = proposals[proposalID];
+        address current;
+        if (proposal.endDate > now) // You can't count while the vote is not over.
+            throw;
+        if (proposal.lastMemberCounted == COUNTED) // The count is already over
+            throw; 
+            
+        if (proposal.lastMemberCounted == NOT_COUNTED)
+            current = memberList.first;
+        else 
+            current = proposal.lastMemberCounted;
         
-        while (start != end) {
-            Member member=members[start];
-            if (proposal.voteCounted[start]==false) { // Verify the vote has not been counted yet.
-                proposal.voteCounted[start]=true; // The vote will be counted.
-                
-                address delegate=start;
+        while (max-- != 0) { 
+            Member member=members[current];
+            address delegate=current;
+            if(isValidMember(current)) {
+                uint depth=0;
                 // Seach the final vote.
                 while (true){
                     VoteType vote=proposal.vote[delegate];
                     if (vote==VoteType.Abstain) { // Look at the delegate
+                        depth+=1;
                         delegate=members[delegate].delegate[uint(proposal.proposalType)]; // Find the delegate.
-                        if (delegate==start || delegate==0) { // Back to the start of the loop or failed to name a delegate.
-                           proposal.voteAbstain+=1;
+                        if (delegate==current // The delegation chain forms a circle.
+                            || delegate==0  // Has not set a delegate.
+                            || depth>MAX_DELEGATION_DEPTH) { // Too much depth, we must limit it in order to avoid some circle of delegation made to consume too much gaz.
                            break;
                         }
                     }
                     if (vote==VoteType.Yes) {
                         proposal.voteYes+=1;
                         break;
+                    } else if (vote==VoteType.No) {
+                        proposal.voteNo+=1;
+                        break;
                     }
-                    // Else voted No, so we don't count.
                 }
-                
+            } else {
+                // TODO: Delete the members if they are expired.
             }
-            start=member.succ; // In next iteration start from the next node.
             
-            // TODO: Delete the members if they are expired.
+            current=member.succ; // In next iteration start from the next node.
+            if (current==0) { // We reached the last member.
+                proposal.lastMemberCounted=COUNTED;
+                break;
+            }
+            
         }
         
     }
     
-
+    function executeAddMemberProposal(uint proposalID) {
+        Proposal proposal = proposals[proposalID];
+        if (proposal.proposalType != ProposalType.AddMember) // Not a proposal to add a member.
+            throw; 
+        if (!isExecutable(proposalID)) // Proposal was not approved.
+            throw;
+        proposal.executed=true; // The proposal will be executed.
+        addMember(proposal.recipient);
+    }
 
     /// CONSTANTS ///
     
@@ -208,24 +233,25 @@ function insertEnd(List list, Node newNode)
     /** Return true if the proposal is validated, false otherwise.
      *  @param proposalID ID of the proposal to count votes from.
      */
-    function isValidated(uint proposalID) returns (bool) {
+    function isExecutable(uint proposalID) constant returns (bool) {
         Proposal proposal = proposals[proposalID];
-        if (proposal.endDate > now)
+
+        if (proposal.lastMemberCounted != COUNTED) // Not counted yet.
             return false;
+        if (proposal.executed) // The proposal has already been executed.
+            return false;
+        if (proposal.value>this.balance) // Not enough to execute it.
+            return false; 
             
-        // Deduce the number of votes No by discounting the number of abstentions and votes Yes.
-        uint voteNo=nbMembers;
-        if (voteNo-proposal.voteYes>voteNo) // Overflow somewhere.
+        return (proposal.voteYes>proposal.voteNo);
+    }
+    
+    function isValidMember(address m) constant returns(bool) {
+        if (members[m].registration==0) // Not a member.
             return false;
-        else
-            voteNo-=proposal.voteYes;
-            
-        if (voteNo-proposal.voteAbstain>voteNo) // Overflow somewhere.
+        if (members[m].registration+registrationTime<now) // Has expired.
             return false;
-        else
-            voteNo-=proposal.voteAbstain; 
-        
-        return (proposal.voteYes>voteNo);
+        return true;
     }
 
 }
