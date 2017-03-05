@@ -17,7 +17,9 @@ class Proposal extends Component {
     addressContract: null,
     delegate: null,
     metaContract: null,
-    accounts:null
+    accounts: null,
+    askMembership: null,
+
   }
 
   componentDidMount() {
@@ -41,21 +43,39 @@ class Proposal extends Component {
             .catch((err) => console.error(err))
         })
       } else {
-        alert("install Metamask or use Mist");
+        alert("install Metamask or use Mist")
       }
     }, 1000)
   }
 
   handleChangeDelegate = (event) => {
-    this.setState({delegate: event.target.value});
+    this.setState({delegate: event.target.value})
   }
 
-  setDelegate = (address) => {
+  handleChangeAskMembership = (event) => {
+    this.setState({askMembership: event.target.value})
+  }
+
+  setDelegate = () => {
     this.state.metaContract.at(this.state.addressContract)
       .then((contract) => contract.setDelegate(
         0,
         this.state.delegate,
-        {from: '0x77282410cee8ee341510d966fa33845c1859e1f0'}
+        {from: this.state.addressContract}
+      ))
+      .then((result) => console.log(result))
+      .catch((err) => {
+        console.error(err);
+      })
+  }
+
+  askMembership = () => {
+    this.state.metaContract.at(this.state.addressContract)
+      .then((contract) => contract.askMembership(
+        {
+          value: web3.toWei(this.state.askMembership, "ether"),
+          from: this.state.addressContract
+        }
       ))
       .then((result) => console.log(result))
       .catch((err) => {
@@ -67,15 +87,15 @@ class Proposal extends Component {
     return (
       <div id="container">
         <h1>Abie</h1>
-        <ul>
-          <li>Balance : {this.state.balance}</li>
-        </ul>
-        <ul>
-          <li>
+        <p>Balance : {this.state.balance}</p>
+        <p>
             Set Delegate <input type="text" onChange={this.handleChangeDelegate} />
             <button onClick={this.setDelegate}>Submit address</button>
-          </li>
-        </ul>
+        </p>
+        <p>
+            Ask Membership <input type="text" onChange={this.handleChangeAskMembership} />
+            <button onClick={this.askMembership}>Submit ask membership</button>
+        </p>
       </div>
     )
   }

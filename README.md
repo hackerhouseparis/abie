@@ -1,7 +1,7 @@
 # Abie
 
 ## Test smart contract
-ii
+
 ```
 truffle compile
 truffle migrate
@@ -34,7 +34,6 @@ more examples:
 https://github.com/ipfs/awesome-ipfs#single-page-webapps
 
 ## Code 
-i
 
 ### Variables de configurations:
 
@@ -53,7 +52,7 @@ i
 ```javascript
     event Donated(address donor, uint amount);
 ```
-this is the definition of the notification which is triggered when a donation occured. 
+This is the definition of the notification which is triggered when a donation is made. 
 
 ### Enums
 
@@ -63,12 +62,12 @@ this is the definition of the notification which is triggered when a donation oc
 
 ```
 Proposal is a generic type.
-AddMember : this proposal contain a vote to confirm a new voter
-FundProject: this type of proposal contain a vote to fund a project 
+AddMember: this proposal contain a vote to approve a new voter.
+FundProject: this type of proposal contains a vote to fund a project. 
 
 VoteType
-This is the content of a single vote. a voter can either vote yes, no or abstain. (default: abstain)
-if a voter abstain, his vote goes to his delegate.
+This is the content of a single vote. A voter can either vote yes, no or abstain. (default: abstain)
+If a voter abstains, his vote goes to his delegate.
 
 ### Structs
 
@@ -89,13 +88,15 @@ if a voter abstain, his vote goes to his delegate.
 
 ```
 
-A proposal represent either a proposal to confirm a new voter or a vote to fund a project.
+A proposal represents either a proposal to confirm a new voter or a vote to fund a project.
+
 In the case of a project, the data should be the IPFS link of the description.
 
-Because of the liquid democratie, the vote are counted only after the deadline. That way, if someone did not vote, his delegate vote for him.
+Because of the liquid democracy, the vote are counted only after the deadline. That way, if someone did not vote, his delegate votes for him.
 
-when the vote are counted we follow a chained list, and we update the voteCounted array such that we always have voteYes + voteAbstain = #voteCounted. If we run out of fuel, we can run this function in multiples steps.
-At the end, voteYes + voteAbstain = #vote
+When the votes are counted we follow a chained list, and we update the voteCounted array such that we always have voteYes + voteAbstain = #voteCounted. If we run out of fuel, we can run this function in multiples steps.
+
+In the end, voteYes + voteAbstain = #vote
 
 ```javascript
 
@@ -106,10 +107,10 @@ At the end, voteYes + voteAbstain = #vote
     }
  ```
 
-A Member represent a voting Weight, given to a particular account. the owner of the account has the power to vote once for each proposal.
+A Member represents voting weight of 1, given to a particular account. The owner of the account has the power to vote once for each proposal.
 If the member did not vote before the deadline for a proposal, his vote weight goes to another member called his delegate. (if he selected one).
 
- It has two delegate, one for new members proposal, and one for fund proposals
+It has two delegates, one for new members proposal, and one for fund proposals.
 
  ```javascript
 
