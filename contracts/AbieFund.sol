@@ -63,6 +63,7 @@ contract AbieFund {
     
     /// Require the caller to be a member.
     modifier isMember() {
+    
         if (members[msg.sender].registration==0) // Not a member.
             throw;
         if (members[msg.sender].registration+registrationTime<now) // Has expired.
@@ -105,7 +106,7 @@ function insertEnd(List list, Node newNode)
       * @param proposalType 0 for AddMember, 1 for FundProject.
       * @param target account to delegate to.
       */
-    function setDelegate(uint8 proposalType, address target)
+    function setDelegate(uint8 proposalType, address target) isMember
     {
         members[msg.sender].delegate[proposalType] = target;
     }
@@ -118,7 +119,6 @@ function insertEnd(List list, Node newNode)
     /// Ask membership of the fund.
     function askMembership () payable costs(membershipFee) {
         Donated(msg.sender,msg.value); // Register the donation.
-        
         // Create a proposal to add the member.
         proposals.push(Proposal({
         name: 0x0,
@@ -142,7 +142,6 @@ function insertEnd(List list, Node newNode)
             throw;
         if (proposal.endDate < now) // Vote is over.
             throw;
- 
         proposals[proposalID].vote[msg.sender] = voteType;
     }
     
