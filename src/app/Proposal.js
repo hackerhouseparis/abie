@@ -19,7 +19,7 @@ class Proposal extends Component {
     metaContract: null,
     accounts: null,
     askMembership: null,
-
+    web3RPC: null
   }
 
   componentDidMount() {
@@ -34,10 +34,12 @@ class Proposal extends Component {
         let metaCoinBalance = 0
         meta.setProvider(provider)
         const web3RPC = new Web3(provider)
+        this.setState({web3RPC})
         // Get accounts.
         web3RPC.eth.getAccounts((err, acc) => {
           console.log(err)
           console.log(acc)
+          this.setState({accounts: acc})
           return meta.deployed()
             .then((contract) => this.setState({addressContract: contract.address}))
             .catch((err) => console.error(err))
@@ -61,7 +63,7 @@ class Proposal extends Component {
       .then((contract) => contract.setDelegate(
         0,
         this.state.delegate,
-        {from: this.state.addressContract}
+        {from: this.state.accounts[0]}
       ))
       .then((result) => console.log(result))
       .catch((err) => {
@@ -71,12 +73,14 @@ class Proposal extends Component {
 
   askMembership = () => {
     this.state.metaContract.at(this.state.addressContract)
-      .then((contract) => contract.askMembership(
+      .then((contract) => {
+        console.log(contract)
+        return contract.askMembership(
         {
-          value: web3.toWei(this.state.askMembership, "ether"),
-          from: this.state.addressContract
+          value: 2,
+          from: this.state.accounts[4]
         }
-      ))
+      )})
       .then((result) => console.log(result))
       .catch((err) => {
         console.error(err);
