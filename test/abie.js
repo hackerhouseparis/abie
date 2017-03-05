@@ -42,6 +42,26 @@ contract('AbieFund', function(accounts) {
       assert.equal(result[3], candidate )
     })
   })
+
+    it("it publishes a proposal", function() {
+      var member1 = accounts[0]
+      var member2 = accounts[1]
+      var member3 = accounts[2]
+      var member4 = accounts[3]
+      var candidate = accounts[4]
+
+      var abieFund;
+      return AbieFund.new([member1,member2,member3,member4]).then(function(instance) {
+        abieFund = instance
+        return abieFund.addProposal(0x0, 1, 0x0, {value: web3.toWei(1, "ether") ,from: candidate})
+      }).then(function(result) {
+        return abieFund.proposals.call(0)
+        // return abieFund.proposals.call(0)
+      }).then(function(result) {
+        // result[3] => proposal.recipient
+        assert.equal(result[3], candidate )
+      })
+    })
 /*
   it("test vote", function() {
     var member1 = accounts[0]

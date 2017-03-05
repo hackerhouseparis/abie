@@ -19,7 +19,10 @@ class Proposal extends Component {
     metaContract: null,
     accounts: null,
     askMembership: null,
-    web3RPC: null
+    web3RPC: null,
+    name: '',
+    valueDeposit: 0,
+    dataDeposit: '',
   }
 
   componentDidMount() {
@@ -58,6 +61,18 @@ class Proposal extends Component {
     this.setState({askMembership: event.target.value})
   }
 
+  handleChangeName = (event) => {
+    this.setState({name: event.target.value})
+  }
+
+  handleChangeValueDeposit = (event) => {
+    this.setState({valueDeposit: event.target.value})
+  }
+
+  handleChangeDataDeposit = (event) => {
+    this.setState({dataDeposit: event.target.value})
+  }
+
   setDelegate = () => {
     this.state.metaContract.at(this.state.addressContract)
       .then((contract) => contract.setDelegate(
@@ -74,12 +89,29 @@ class Proposal extends Component {
   askMembership = () => {
     this.state.metaContract.at(this.state.addressContract)
       .then((contract) => {
-        console.log(contract)
-        console.log("web3",web3);
         return contract.askMembership(
         {
           value: web3.toWei(10, "ether"),
           from: this.state.accounts[4],
+          gas: 4000000
+        }
+      )})
+      .then((result) => console.log(result))
+      .catch((err) => {
+        console.error(err);
+      })
+  }
+
+  addProposal = () => {
+    this.state.metaContract.at(this.state.addressContract)
+      .then((contract) => {
+        return contract.addProposal(
+          this.state.name,
+          this.state.valueDeposit,
+          this.state.dataDeposit,
+        {
+          value: web3.toWei(1, "ether"),
+          from: this.state.accounts[0],
           gas: 4000000
         }
       )})
@@ -96,11 +128,18 @@ class Proposal extends Component {
         <p>Balance : {this.state.balance}</p>
         <p>
             Set Delegate <input type="text" onChange={this.handleChangeDelegate} />
-            <button onClick={this.setDelegate}>Submit address</button>
+            <button onClick={this.setDelegate}>Add address</button>
         </p>
         <p>
             Ask Membership <input type="text" onChange={this.handleChangeAskMembership} />
-            <button onClick={this.askMembership}>Submit ask membership</button>
+            <button onClick={this.askMembership}>Ask membership</button>
+        </p>
+        <p>
+          Add proposal&nbsp;
+          <input type="text" onChange={this.handleChangeName} placeholder="Name of the proposition (hex)" />
+          <input type="text" onChange={this.handleChangeRequestAmount} placeholder="Requested amount (Wei)" />
+          <input type="text" onChange={this.handleChangeDescription} placeholder="Link IPFS" />
+          <button onClick={this.addProposal}>Submit add proposal</button>
         </p>
       </div>
     )
