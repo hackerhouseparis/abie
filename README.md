@@ -121,19 +121,19 @@ Some usefull links related to IPFS:
 
 Public Gateway:
 
-https://ipfs.io/ipfs/{hash}
+https://ipfs.io/ipfs/hash
 
 Markdown reader example:
 
-https://ipfs.io/ipfs/QmSrCRJmzE4zE1nAfWPbzVfanKQNBhp7ZWmMnEdbiLvYNh/mdown#/ipfs/QmfQ75DjAxYzxMP2hdm6o4wFwZS5t7uorEZ2pX9AKXEg2u
+https://ipfs.io/ipfs/QmSrCRJmzE4zE1nAfWPbzVfanKQNBhp7ZWmMnEdbiLvYNh/mdown#/ipfs/file_hash
 
 Javascript IPFS library:
 
-https://github.com/ipfs/js-ipfs#use-in-the-browser-with-browserify-webpack-or-any-bundler
+https://github.com/ipfs/js-ipfs
 
 more examples:
 
-https://github.com/ipfs/awesome-ipfs#single-page-webapps
+https://github.com/ipfs/awesome-ipfs
 
 ## Code 
 
@@ -204,9 +204,8 @@ In the case of a project, the data should be the IPFS link of the description.
 
 Because of the liquid democracy, the vote are counted only after the deadline. That way, if someone did not vote, his delegate votes for him.
 
-When the votes are counted we follow a chained list, and we update the voteCounted array such that we always have voteYes + voteAbstain = #voteCounted. If we run out of fuel, we can run this function in multiples steps.
+When the votes are counted we follow a chained list, and we update the lastMemberCounted. making the count in one step is likely to reach gas limit; remembering last member counted allow us to make this count in multiple step.
 
-In the end, voteYes + voteAbstain = #vote
 
 ```javascript
 
@@ -220,14 +219,14 @@ In the end, voteYes + voteAbstain = #vote
         uint proposalStoppedOnHim; // Number of proposals stopped on him.
     }
 
- ```
+```
 
 A Member represents voting weight of 1, given to a particular account. The owner of the account has the power to vote once for each proposal.
 If the member did not vote before the deadline for a proposal, his vote weight goes to another member called his delegate. (if he selected one).
 
 It has two delegates, one for new members proposal, and one for fund proposals.
 
- ```javascript
+```javascript
 
     // Double chained list.
     struct DoubleChainedList
@@ -236,10 +235,10 @@ It has two delegates, one for new members proposal, and one for fund proposals.
         address last;
     }
 
- ```
+```
 ### Global variables
 
- ```javascript
+```javascript
 
     mapping (address => Member) public members;
 
@@ -250,10 +249,10 @@ It has two delegates, one for new members proposal, and one for fund proposals.
 
     Proposal[] public proposals;
 
- ```
+```
 ### Modifiers
 
- ```javascript
+```javascript
 
     /// Require at least price to be paid.
     modifier costs(uint price) {
