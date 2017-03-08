@@ -26,11 +26,11 @@ La version initiale de cette application à été développé en 24h le weekend 
 
 2. Tout le monde à le droit de soumettre un projet pour une cause.
 
-3. les membres de la communauté vote afin de pour débloquer les fonds pour un projet.
+3. les membres de la communauté votent afin de débloquer les fonds pour un projet.
 
 4. Tout le monde ayant fait un don peut demander à devenir membre de la communauté.
 
-5. les membres de la communauté vote afin d'accepter une demande d'adhésion à la communauté (permet d'éviter les attaques sibylles)
+5. les membres de la communauté votent afin d'accepter une demande d'adhésion à la communauté (permet d'éviter les attaques sibylles)
 
 6. Le vote se fait en démocratie liquide. Ainsi chaque membre de la communauté choisi un délégué. Pour chaque vote il a le choix de voter, ou de se reposer sur le vote de son délégué.
 
