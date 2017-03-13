@@ -23,16 +23,16 @@ contract AbieFund {
 
     struct Proposal
     {
-        bytes32 name;       // short name (up to 32 bytes).
-        uint voteYes;     // number of YES votes.
-        uint voteNo;     // number of abstention. Number of No can be deduced.
-        address recipient;     // address the funds will be sent.
-        uint value;         // quantity of wei to be sent.
-        bytes32 data;       // data of the transaction.
-        ProposalType proposalType;  // type of the proposal.
+        bytes32 name; // short name (up to 32 bytes).
+        uint voteYes; // number of YES votes.
+        uint voteNo;  // number of abstention. Number of No can be deduced.
+        address recipient; // address the funds will be sent.
+        uint value; // quantity of wei to be sent.
+        bytes32 data; // data of the transaction.
+        ProposalType proposalType; // type of the proposal.
         uint endDate; // when the vote will be closed.
         address lastMemberCounted; // last one who was counted or NOT_COUNTED (if the count has not started) or COUNTED (if all the votes has been counted);
-        bool executed; // True if the proposal have been executed.
+        bool executed; // true if the proposal have been executed.
         mapping (address => VoteType) vote; // vote of the party.
     }
 
@@ -42,8 +42,8 @@ contract AbieFund {
         uint registration;  // date of registration, if 0 the member does not exist.
         address[2] delegate; // delegate[proposalType] gives the delegate for the type.
         address prev;
-        address succ; // This should not be deleted even when the member is.
-        uint proposalStoppedOnHim; // Number of proposals stopped on him.
+        address succ; // this should not be deleted even when the member is.
+        uint proposalStoppedOnHim; // number of proposals stopped on him.
     }
 
     mapping (address => Member) public members;
