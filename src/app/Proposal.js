@@ -63,9 +63,7 @@ class Proposal extends Component {
       .then(result => [...new Array(result.toNumber()).keys()])
       .then(range => (
         Promise.all(range.map(i => contract.proposals(i)))
-          .then(results => {
-            this.setState({ proposals: results })
-          })
+          .then(results => this.setState({ proposals: results }))
       ))
       .catch(err => console.error(err))
   }
