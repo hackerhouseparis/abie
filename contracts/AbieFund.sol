@@ -10,6 +10,7 @@ contract AbieFund {
     uint public membershipFee = 0.1 ether;
     uint public deposit = 1 ether;
     uint public nbMembers;
+    uint public nbProposalsFund;
     uint public registrationTime = 1 years;
     uint[2] public voteLength = [1 weeks, 1 weeks];
     uint MAX_DELEGATION_DEPTH=1000;
@@ -148,6 +149,8 @@ contract AbieFund {
           lastMemberCounted: 0,
           executed: false
         }));
+
+        ++nbProposalsFund;
     }
 
     /** Vote for a proposal.
@@ -273,5 +276,4 @@ contract AbieFund {
             return false;
         return true;
     }
-
 }

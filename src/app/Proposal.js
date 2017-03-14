@@ -23,6 +23,7 @@ class Proposal extends Component {
     name: '',
     valueDeposit: 0,
     dataDeposit: '',
+    proposals: [],
   }
 
   componentDidMount() {
@@ -41,16 +42,34 @@ class Proposal extends Component {
         // Get accounts.
         web3RPC.eth.getAccounts((err, acc) => {
           console.log(err)
-          console.log(acc)
+          console.log("accounts :", acc)
           this.setState({accounts: acc})
           return meta.deployed()
-            .then((contract) => this.setState({addressContract: contract.address}))
-            .catch((err) => console.error(err))
+            .then(contract => {
+              this.setState({addressContract: contract.address})
+              this.getProposals(contract)
+            })
+            .catch(err => console.error(err))
         })
       } else {
         alert("install Metamask or use Mist")
       }
     }, 1000)
+  }
+
+  getProposals = contract => {
+    this.state.metaContract.at(this.state.addressContract)
+      .then(contract => contract.nbProposalsFund())
+      .then(result => {
+        let promises = Array.apply(null, {length: result}).map((obj, index) => {
+          return contract.proposals(index)
+            .then(result => result)
+        })
+        Promise.all(promises).then(
+          results => this.setState({proposals: results})
+        )
+      })
+      .catch(err => console.error(err))
   }
 
   handleChangeDelegate = (event) => {
@@ -80,8 +99,8 @@ class Proposal extends Component {
         this.state.delegate,
         {from: this.state.accounts[0]}
       ))
-      .then((result) => console.log(result))
-      .catch((err) => {
+      .then(result => console.log(result))
+      .catch(err => {
         console.error(err);
       })
   }
@@ -96,8 +115,8 @@ class Proposal extends Component {
           gas: 4000000
         }
       )})
-      .then((result) => console.log(result))
-      .catch((err) => {
+      .then(result => console.log(result))
+      .catch(err => {
         console.error(err);
       })
   }
@@ -141,6 +160,14 @@ class Proposal extends Component {
           <input type="text" onChange={this.handleChangeDescription} placeholder="Link IPFS" />
           <button onClick={this.addProposal}>Submit add proposal</button>
         </p>
+        <p>
+          Proposals
+        </p>
+        <ul>
+          {this.state.proposals.map(
+            (obj, index) => <li key={index}>{obj.toString()}</li>
+          )}
+        </ul>
       </div>
     )
   }

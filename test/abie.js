@@ -15,13 +15,8 @@ contract('AbieFund', function(accounts) {
       // member 2 set delegate for AddMember to member 1
       abieFund = instance
       return abieFund.setDelegate(0,member1,{from: member2})
-    }).then(function() {
-      // verify
-      return abieFund.getDelegate.call(member2,0)
-    }).then(function(result) {
-      console.log("res ",result)
-      assert.equal(result, member1)
-    })
+    }).then(() => abieFund.getDelegate.call(member2,0)
+    ).then(result => assert.equal(result, member1))
   })
 
   it("publish a proposal to become a member", function() {
@@ -35,12 +30,8 @@ contract('AbieFund', function(accounts) {
     return AbieFund.new([member1,member2,member3,member4]).then(function(instance) {
       abieFund = instance
       return abieFund.askMembership({value: web3.toWei(1, "ether") ,from: candidate})
-    }).then(function() {
-      return abieFund.proposals.call(0)
-    }).then(function(result) {
-      // result[3] => proposal.recipient
-      assert.equal(result[3], candidate )
-    })
+    }).then(() => abieFund.proposals.call(0)
+    ).then(result => assert.equal(result[3], candidate))
   })
 
     it("it publishes a proposal", function() {
@@ -54,13 +45,12 @@ contract('AbieFund', function(accounts) {
       return AbieFund.new([member1,member2,member3,member4]).then(function(instance) {
         abieFund = instance
         return abieFund.addProposal(0x0, 1, 0x0, {value: web3.toWei(1, "ether") ,from: candidate})
-      }).then(function(result) {
-        return abieFund.proposals.call(0)
-        // return abieFund.proposals.call(0)
-      }).then(function(result) {
+      }).then(result => abieFund.proposals.call(0)
+      ).then(result => {
         // result[3] => proposal.recipient
-        assert.equal(result[3], candidate )
-      })
+        assert.equal(result[3], candidate, "error add proposal")
+        return abieFund.nbProposalsFund()
+      }).then(result => assert.equal(result, 1, "error count proposals"))
     })
 /*
   it("test vote", function() {
