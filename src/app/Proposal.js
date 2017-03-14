@@ -60,37 +60,17 @@ class Proposal extends Component {
   getProposals = contract => {
     this.state.metaContract.at(this.state.addressContract)
       .then(contract => contract.nbProposalsFund())
-      .then(result => {
-        let promises = Array.apply(null, {length: result}).map((obj, index) => {
-          return contract.proposals(index)
-            .then(result => result)
-        })
-        Promise.all(promises).then(
-          results => this.setState({proposals: results})
-        )
-      })
+      .then(result => [...new Array(result.toNumber()).keys()])
+      .then(range => (
+        Promise.all(range.map(i => contract.proposals(i)))
+          .then(results => {
+            this.setState({ proposals: results })
+          })
+      ))
       .catch(err => console.error(err))
   }
 
-  handleChangeDelegate = (event) => {
-    this.setState({delegate: event.target.value})
-  }
-
-  handleChangeAskMembership = (event) => {
-    this.setState({askMembership: event.target.value})
-  }
-
-  handleChangeName = (event) => {
-    this.setState({name: event.target.value})
-  }
-
-  handleChangeValueDeposit = (event) => {
-    this.setState({valueDeposit: event.target.value})
-  }
-
-  handleChangeDataDeposit = (event) => {
-    this.setState({dataDeposit: event.target.value})
-  }
+  handleChange = field => ({ target: { value } }) => this.setState({ [field]: value })
 
   setDelegate = () => {
     this.state.metaContract.at(this.state.addressContract)
@@ -134,8 +114,8 @@ class Proposal extends Component {
           gas: 4000000
         }
       )})
-      .then((result) => console.log(result))
-      .catch((err) => {
+      .then(result => console.log(result))
+      .catch(err => {
         console.error(err);
       })
   }
@@ -146,16 +126,16 @@ class Proposal extends Component {
         <h1>Abie</h1>
         <p>Balance : {this.state.balance}</p>
         <p>
-            Set Delegate <input type="text" onChange={this.handleChangeDelegate} />
+            Set Delegate <input type="text" onChange={this.handleChange('delegate')} />
             <button onClick={this.setDelegate}>Add address</button>
         </p>
         <p>
-            Ask Membership <input type="text" onChange={this.handleChangeAskMembership} />
+            Ask Membership <input type="text" onChange={this.handleChange('askMembership')} />
             <button onClick={this.askMembership}>Ask membership</button>
         </p>
         <p>
           Add proposal&nbsp;
-          <input type="text" onChange={this.handleChangeName} placeholder="Name of the proposition (hex)" />
+          <input type="text" onChange={this.handleChange('name')} placeholder="Name of the proposition (hex)" />
           <input type="text" onChange={this.handleChangeRequestAmount} placeholder="Requested amount (Wei)" />
           <input type="text" onChange={this.handleChangeDescription} placeholder="Link IPFS" />
           <button onClick={this.addProposal}>Submit add proposal</button>
