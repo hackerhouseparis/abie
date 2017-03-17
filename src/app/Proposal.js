@@ -141,11 +141,25 @@ class Proposal extends Component {
         <p>
           Proposals
         </p>
-        <ul>
+
           {this.state.proposals.map(
-            (obj, index) => <li key={index}>{obj.toString()}</li>
+            (obj, index) =>
+              (
+                <ul key={index}>
+                  <li>name: {web3.toAscii(obj[0])}</li>
+                  <li>voteYes: {obj[1].toNumber()}</li>
+                  <li>voteYes: {obj[2].toNumber()}</li>
+                  <li>recipient: {obj[3].toString()}</li>
+                  <li>value: {obj[4].toNumber()}</li>
+                  <li>data: {'' + web3.toAscii(obj[5])}</li>
+                  <li>proposalType: {obj[6].toNumber()}</li>
+                  <li>endDate: {obj[7].toNumber()}</li>
+                  <li>lastMemberCounted: {obj[8].toString()}</li>
+                  <li>executed: {'' + obj[9]}</li>
+                </ul>
+              )
           )}
-        </ul>
+
       </div>
     )
   }

@@ -50,7 +50,8 @@ contract('AbieFund', function(accounts) {
         // result[3] => proposal.recipient
         assert.equal(result[3], candidate, "error add proposal")
         return abieFund.nbProposalsFund()
-      }).then(result => assert.equal(result, 1, "error count proposals"))
+      }).then(result => assert.equal(result, 1, "error count proposals")
+      )
     })
 /*
   it("test vote", function() {
