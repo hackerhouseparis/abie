@@ -1,8 +1,6 @@
 # Abie Fund
 
-Main repository: https://github.com/hackerhouseparis/abie
-
-Abie Fund was first released on March 5th, 2017.
+Abie Fund was first released on March 5th, 2017 under [MIT License](https://github.com/AbieFund/abie/blob/master/LICENSE).
 
 We’re on [Slack](http://slack.abie.fund)! Don't hesitate to join.
 
