@@ -4,7 +4,7 @@ Abie Fund was first released on March 5th, 2017 under [MIT License](https://gith
 
 We’re on [Slack](http://slack.abie.fund)! Don't hesitate to join.
 
-## Welcome to Abie!
+## Intro
 
 Abie Fund is a DAO that includes a voting system based on "liquid democracy". The community vote triggers a transaction to the beneficiary. We vote when a proposal is submitted or when someone asks for membership (Sybil-proof).
 
