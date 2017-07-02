@@ -1,6 +1,6 @@
-var AbieFund = artifacts.require("./AbieFund.sol");
-let m1, m2, m3, m4, candidate;
-let abie; // abie is an abstraction of the main contract "AbieFund.sol"
+var AbieFund = artifacts.require("./AbieFund.sol")
+let m1, m2, m3, m4, candidate
+let abie // abie is an abstraction of the main contract "AbieFund.sol"
 
 contract('AbieFund', (accounts)=> {
   before(async ()=> {
@@ -12,20 +12,20 @@ contract('AbieFund', (accounts)=> {
     candidate = accounts[4]
   })
 
-  it("m2 set delegate", ()=> {
-    return abie.setDelegate(0,m1,{from: m2})
+  it("m2 set delegate", async ()=> {
+    await abie.setDelegate(0,m1,{from: m2})
     .then(() => abie.getDelegate.call(m2,0))
     .then(result => assert.equal(result, m1))
   })
 
-  it("candidate ask for membership", () => {
-    return abie.askMembership({value: web3.toWei(1, "ether") ,from: candidate})
+  it("candidate ask for membership", async () => {
+    await abie.askMembership({value: web3.toWei(1, "ether") ,from: candidate})
     .then(() => abie.proposals.call(0))
     .then(result => assert.equal(result[3], candidate))
   })
 
-  it("proposal is published", () => {
-    return abie.addProposal(0x0, 1, 0x0, {value: web3.toWei(1, "ether") ,from: candidate})
+  it("proposal is published", async () => {
+    await abie.addProposal(0x0, 1, 0x0, {value: web3.toWei(1, "ether") ,from: candidate})
     .then(result => abie.proposals.call(0))
     .then(result => {
       assert.equal(result[3], candidate, "error add proposal")
@@ -33,16 +33,17 @@ contract('AbieFund', (accounts)=> {
     .then(result => assert.equal(result, 1, "error count proposals"))
   })
 
-  it("test vote", () => {
-      return abie.isValidMember(m1)
-      check = abie.isValidMember(m1)
-      assert.isTrue(check, "m1 is not a valid member")
-      return abie.vote(1, {from: m1})
-      .then(() => {
-        return abie.countAllVotes(0)
-        .then((result) => {
-          assert.equal(result, 1, "error during the vote")
-        })
-     })
+  it("test vote", async () => {
+
+    // "BigNumber Error: new BigNumber() not a number: [object Object]" without this line. Don't know why... */
+    return abie.isValidMember(m1)
+
+    await abie.vote(1, {from: m1})
+    .then( async () => {
+      await abie.countAllVotes(0)
+      .then(result => {
+        assert.equal(result, 1, "error during the vote")
+      })
+    })
   })
 })
