@@ -1,5 +1,5 @@
 var AbieFund = artifacts.require("./AbieFund.sol");
-let m1, m2, m3, m4, m5;
+let m1, m2, m3, m4, candidate;
 let abie; // abie is an abstraction of the main contract "AbieFund.sol"
 
 contract('AbieFund', (accounts)=> {
