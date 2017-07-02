@@ -10,49 +10,27 @@ function isValidMember(address m) constant returns(bool) {
     return true;
 }
 
+abie.isValidMember(m1) should return "true", but it does NOT and I don't why. 
+
+The contract was deployed from this address.
+
 *****/
 
-var AbieFund = artifacts.require("./AbieFund.sol")
-let m1, m2, m3, m4, candidate
-let abie, m1Valid, valid
+var AbieFund = artifacts.require("AbieFund")
+let m1, m1Valid
+let abie
 
 contract('AbieFund', (accounts)=> {
-  before(async ()=> {
-    abie = await AbieFund.deployed()
-  })
-
-  it("m1 is a valid member", () => {
+  before( async ()=> {
     m1 = accounts[0]
-    return abie.isValidMember(m1)
-    m1Valid = abie.isValidMember(m1)
-    assert.isTrue(m1Valid, "m1 is not a valid member")
+    abie = await AbieFund.deployed()
+    //console.log(abie)
+    //console.log(accounts)
+    m1Valid = await abie.isValidMember(m1)
+    console.log("  m1Valid =", m1Valid, "\n")
   })
 
-  it("m2 is a valid member", () => {
-    m2 = accounts[1]
-    return abie.isValidMember(m2)
-    m2Valid = abie.isValidMember(m2)
-    assert.isTrue(m2Valid, "m2 is not a valid member")
-  })
-
-  it("m3 is a valid member", () => {
-    m3 = accounts[2]
-    return abie.isValidMember(m3)
-    m3Valid = abie.isValidMember(m3)
-    assert.isTrue(m3Valid, "m3 is not a valid member")
-  })
-
-  it("m4 is a valid member", () => {
-    m4 = accounts[3]
-    return abie.isValidMember(m4)
-    m4Valid = abie.isValidMember(m4)
-    assert.isTrue(m4Valid, "m4 is not a valid member")
-  })
-
-  it("candidate is NOT a valid member : he's just a candidate! ;)", () => {
-    candidate = accounts[4]
-    return abie.isValidMember(candidate)
-    candidateValid = abie.isValidMember(candidate)
-    assert.isTrue(candidateValid, "candidate seems to be a valid memmber and that's weird...")
+  it("m1 is a valid member", async () => {
+    assert.isOk(m1Valid, "m1 is not a valid member")
   })
 })
