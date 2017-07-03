@@ -6,24 +6,25 @@ We’re on [Slack](http://slack.abie.fund)! Don't hesitate to join.
 
 ## Intro
 
-Abie Fund is a DAO that includes a voting system based on "liquid democracy". The community vote triggers a transaction to the beneficiary. We vote when a proposal is submitted or when someone asks for membership (Sybil-proof).
+Abie Fund is a DAO that includes a voting system based on liquid democracy (delegative model). The community vote triggers a transaction to the beneficiary. We vote when a proposal is submitted or when someone asks for membership (Sybil-proof).
 
-## Use cases
+Liquid democracy allows participants that don't have any device or Internet access to vote on each incoming proposal, and therefore increase the participation rate. 
 
-* A group of people that want to fund initiatives for one specific cause
-* A transparent common account, easy to manage and ridiculously easy to deploy and configure quickly
-* A corporate brand that would allow its customers to directly manage the funds allocated to certain objectives
+## Main use cases
+
+* A community that wants to fund initiatives for one specific and global cause
+* A group of people or orgs that need to raise fund in emergency
+* A brand that allows its customers to directly manage the funds allocated to certain objectives
 * A city hall that would give more decision power to people on one specific project
-* A group of friends trading together, voting every week to adjust their collective investment
 
-They can all use Abie to **take collective decisions and actions in an intuitive and easy way**.
+They can all use Abie to **take collective decisions and actions in an intuitive and easy way**.:sparkles:
 
 ## Implemented Features
 
 * Enable external donations (including anon)
+* Any donor can request membership
 * Anyone can submit a proposal
 * The vote of the community triggers the transaction to the beneficiary
-* Any donor can request membership
 * Members have one right to vote each proposal or membership request
 * As the vote follow the rules of liquid democracy, you can choose (or become) a delegate
 * You can switch delegate or switch to direct democracy at anytime
@@ -48,31 +49,17 @@ npm i
 npm start
 ```
 
-## Get involved
-
-You can find a [presentation](http://prez.abie.fund) [Fench] and our [roadmap](http://slack.abie.fund).
-
-**All contribs are rewarded**, we're backed by lucky crypto investors! ;) 
-
-Feel free to your pull request or send offers at **team@abie.fund**.
-
 ## Next steps
 
-1. Deploy on mainnet
-2. Fund one first demo project
-3. Select 3 different use cases and measure performance
-4. Improve the documentation
-5. Listen to users fedbacks
+1. Improve the tests
+2. Improve the documentation
+3. Deploy on testnet
+4. Organize stress tests and launch a bounty program
+5. Deploy on mainnet
 
-## Resources 
+## Get involved
 
-### IPFS and storage
+**All contribs are rewarded**, we will deploy 'Abie Dev' on mainnet asap and start to fund ourselves using our own app.
 
-We will use IPFS protocol to store projects' descriptions, reviews and photos related to each proposal.
+Feel free to send us a message at **team@abie.fund** or join our [Slack](http://slack.abie.fund).
 
-Some useful links about IPFS:
-
-* Public Gateway: https://ipfs.io/ipfs/hash
-* Markdown reader example: https://ipfs.io/ipfs/QmSrCRJmzE4zE1nAfWPbzVfanKQNBhp7ZWmMnEdbiLvYNh/mdown#/ipfs/file_hash
-* Javascript IPFS library: https://github.com/ipfs/js-ipfs
-* More examples: https://github.com/ipfs/awesome-ipfs
