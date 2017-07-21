@@ -8,7 +8,7 @@ Abie Fund is a DAO that includes a voting system based on liquid democracy (dele
 
 Liquid democracy allows participants that don't have any device or Internet access to vote on each incoming proposal, and therefore increase the participation rate. 
 
-## Main use cases
+## Use cases
 
 * A community that wants to fund initiatives for one specific and global cause
 * A group of people or orgs that need to raise fund in emergency
@@ -17,7 +17,7 @@ Liquid democracy allows participants that don't have any device or Internet acce
 
 They can all use Abie to **take collective decisions and actions in an intuitive and easy way**.:sparkles:
 
-## Implemented Features
+## Features
 
 * Enable external donations (including anon)
 * Any donor can request membership
@@ -49,15 +49,7 @@ npm start
 
 ## Next steps
 
-1. Improve the tests
-2. Improve the documentation
-3. Deploy on testnet
-4. Organize stress tests and launch a bounty program
-5. Deploy on mainnet
+1. Allow users to trigger the `addProposal()` and `vote()` functions from http://abie.fund/app.html (**reward is set to 1 ETH per function**).
+2. Improve the [tests](https://github.com/AbieFund/abie/tree/master/test)
 
-## Get involved
-
-**All contribs are rewarded**, we will deploy 'Abie Dev' on mainnet asap and start to fund ourselves using our own app.
-
-Feel free to send us a message at **team@abie.fund** or join our [Slack](http://slack.abie.fund).
-
+Feel free to join our [Slack](http://slack.abie.fund).
