@@ -15,7 +15,7 @@ Liquid democracy allows participants that don't have any device or Internet acce
 * A brand that allows its customers to directly manage the funds allocated to certain objectives
 * A city hall that would give more decision power to people on one specific project
 
-They can all use Abie to **take collective decisions and actions in an intuitive and easy way**.:sparkles:
+They can use Abie to **take collective decisions and actions in an intuitive and easy way**.
 
 ## Features
 
@@ -23,9 +23,9 @@ They can all use Abie to **take collective decisions and actions in an intuitive
 * Any donor can request membership
 * Anyone can submit a proposal
 * The vote of the community triggers the transaction to the beneficiary
-* Members have one right to vote each proposal or membership request
+* Members have one right to vote each proposal (including membership request)
 * As the vote follow the rules of liquid democracy, you can choose (or become) a delegate
-* You can switch delegate or switch to direct democracy at anytime
+* You can switch delegate or switch to direct democracy
 
 ## Test
 
@@ -47,9 +47,10 @@ npm i
 npm start
 ```
 
-## Next steps
+## To do ASAP
 
-1. Allow users to trigger the `addProposal()` and `vote()` functions from http://abie.fund/app.html (**reward is set to 1 ETH per function**).
+1. Enable users to trigger the `addProposal()` and `vote()` functions from app.html (**reward is set to 1 ETH per function**).
 2. Improve the [tests](https://github.com/AbieFund/abie/tree/master/test)
 
-Feel free to join our [Slack](http://slack.abie.fund).
+
+Feel free to join our [Slack](http://slack.abie.fund)!
