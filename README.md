@@ -47,10 +47,20 @@ npm i
 npm start
 ```
 
-## To do ASAP
+## Next steps
 
-1. Enable users to trigger the `addProposal()` and `vote()` functions from app.html (**reward is set to 1 ETH per function**).
-2. Improve the [tests](https://github.com/AbieFund/abie/tree/master/test)
+### bootstrap + jquery 
+in progress
 
+* Create UI for 2 vital functions addProposal() and vote()
+* Deploy on mainnet and test in real --> v0.1 release
+* Set a 3 ETH bug bounty programme 3 ETH stored in a contract, capped at 5, 1 week vote, voting functions
+
+### JS+Redux+React
+10 ETH for this work
+
+* Add membership functions triggers in UI
+* Add the setDelegate() function trigger in UI
+* v1 release
 
 Feel free to join our [Slack](http://slack.abie.fund)!
