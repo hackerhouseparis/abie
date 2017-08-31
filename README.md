@@ -1,6 +1,6 @@
 # Abie Fund
 
-Abie Fund was first released on March 5th with the help of Ethergency team, 2017 under [MIT License](https://github.com/AbieFund/abie/blob/master/LICENSE).
+Abie Fund was first released on March 5th, 2017 under [MIT License](https://github.com/AbieFund/abie/blob/master/LICENSE) with the help of Ethergency team.
 
 ## Intro
 
@@ -48,7 +48,7 @@ npm start
 ```
 
 ## Next steps
-
+JS + Redux + React
 * Create basic UI so that users can trigger the following 3 'vital' functions : addProposal(), vote(), and executeProposal()
 * Deploy on mainnet --> v0.1 release
 * Set a 3 ETH bug bounty programme : a contract holding 3 ETH, capped at 5 ETH, 1 week voting period.
