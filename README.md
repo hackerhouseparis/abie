@@ -52,11 +52,11 @@ truffle test
 
 ## Run
 
-`npm i` will install all packages included in the file package.json  
-then
+`npm i` will install all packages included in the file package.json, then
 `npm start`
 
-In your browser open `localhost:3000`
+In your browser, you can now open the interface on port 3000:
+`localhost:3000`
 
 
 ## Next steps
