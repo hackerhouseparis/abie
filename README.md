@@ -52,9 +52,7 @@ truffle test
 
 ## Run
 
-
-install all packages included in the file package.json
-`npm i`
+`npm i` will install all packages included in the file package.json  
 then
 `npm start`
 
