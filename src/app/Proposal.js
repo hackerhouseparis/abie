@@ -7,7 +7,7 @@ import AbieFund from '../../build/contracts/AbieFund.json'
 import '../www/styles/Proposal.scss'
 
 const TESTRPC_HOST = 'localhost'
-const TESTRPC_PORT = '8545'
+const TESTRPC_PORT = '9545'
 
 class Proposal extends Component {
 
@@ -69,7 +69,7 @@ class Proposal extends Component {
   }
 
   handleChange = field => ({ target: { value } }) => this.setState({ [field]: value })
-
+  
   setDelegate = () => {
     this.state.metaContract.at(this.state.addressContract)
       .then((contract) => contract.setDelegate(
@@ -118,6 +118,45 @@ class Proposal extends Component {
       })
   }
 
+  voteYes = idx => {
+    console.log("idx:", idx)
+    this.state.metaContract.at(this.state.addressContract)
+      .then((contract) => {
+        return contract.vote(
+          idx,
+          1,
+        {
+          value: 0,
+          from: this.state.accounts[0],
+          gas: 4000000
+        }
+      )})
+      .then(result => console.log(result))
+      .catch(err => {
+        console.error(err);
+      })
+  }
+
+   voteNo = idx => {
+    console.log("idx:", idx)
+    this.state.metaContract.at(this.state.addressContract)
+      .then((contract) => {
+        return contract.vote(
+          idx,
+          2,
+        {
+          value: 0,
+          from: this.state.accounts[0],
+          gas: 4000000
+        }
+      )})
+      .then(result => console.log(result))
+      .catch(err => {
+        console.error(err);
+      })
+  }
+
+
   render() {
     return (
       <div id="container">
@@ -138,6 +177,7 @@ class Proposal extends Component {
           <input type="text" onChange={this.handleChangeDescription} placeholder="Link IPFS" />
           <button onClick={this.addProposal}>Submit add proposal</button>
         </p>
+
         <p>
           Proposals
         </p>
@@ -147,8 +187,7 @@ class Proposal extends Component {
               (
                 <ul key={index}>
                   <li>name: {web3.toAscii(obj[0])}</li>
-                  <li>voteYes: {obj[1].toNumber()}</li>
-                  <li>voteYes: {obj[2].toNumber()}</li>
+                  <li>voteYes: {obj[1].toNumber()}    voteNo: {obj[2].toNumber()}</li>
                   <li>recipient: {obj[3].toString()}</li>
                   <li>value: {obj[4].toNumber()}</li>
                   <li>data: {'' + web3.toAscii(obj[5])}</li>
@@ -156,6 +195,11 @@ class Proposal extends Component {
                   <li>endDate: {obj[7].toNumber()}</li>
                   <li>lastMemberCounted: {obj[8].toString()}</li>
                   <li>executed: {'' + obj[9]}</li>
+                  <li>
+                    <button style={{color: "green"}} onClick={() => this.voteYes(index)}>Vote Yes</button>
+                    &nbsp;
+                    <button style={{color: "red"}} onClick={() => this.voteNo(index)}>Vote No</button>
+                  </li>
                 </ul>
               )
           )}
