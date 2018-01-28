@@ -6,7 +6,7 @@ Abie Fund was first released on March 5th, 2017 under [MIT License](https://gith
 
 Abie Fund is a DAO that includes a voting system based on liquid democracy (delegative model). The community vote triggers a transaction to the beneficiary. We vote when a proposal is submitted or when someone asks for membership (Sybil-proof).
 
-Liquid democracy allows participants that don't have any device or Internet access to vote on each incoming proposal, and therefore increase the participation rate. 
+Liquid democracy allows participants that don't have any device or Internet access to vote on each incoming proposal, and therefore increase the participation rate.
 
 ## Use cases
 
@@ -27,25 +27,39 @@ They can use Abie to **take collective decisions and actions in an intuitive and
 * As the vote follow the rules of liquid democracy, you can choose (or become) a delegate
 * You can switch delegate or switch to direct democracy
 
+## Requirements
+
+ * [npm](https://www.npmjs.com/), package manager for JavaScript
+ * [nodejs](https://nodejs.org/en/), JavaScript runtime built on Chrome's V8 JavaScript engine  
+ * [truffle](https://github.com/trufflesuite/truffle), development environment, testing framework and asset pipeline for Ethereum
+ * [testrpc](https://www.npmjs.com/package/ethereumjs-testrpc), testrpc is a Node.js based Ethereum client for testing and development
+
 ## Test
+
+make sure you have latest versions of npm and nodejs installed, then:
 
 ```
 npm install -g truffle
 npm install -g ethereumjs-testrpc
+truffle compile
 ```
 
+In another terminal run `testrpc` then
 ```
-truffle compile
 truffle migrate
 truffle test
 ```
 
 ## Run
 
-```
-npm i
-npm start
-```
+
+install all packages included in the file package.json
+`npm i`
+then
+`npm start`
+
+In your browser open `localhost:3000`
+
 
 ## Next steps
 JS + Redux + React
