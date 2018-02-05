@@ -126,7 +126,8 @@ contract AbieFund {
           value: 0x0,
           data: 0x0,
           proposalType: ProposalType.AddMember,
-          endDate: now + voteLength[uint256(ProposalType.AddMember)],
+          endDate: now + 2000000,
+          //voteLength[uint256(ProposalType.AddMember)],
           lastMemberCounted: 0,
           executed: false
         }));
@@ -145,7 +146,7 @@ contract AbieFund {
           value: _value,
           data: _data,
           proposalType: ProposalType.FundProject,
-          endDate: now,
+          endDate: now + 2000000,
           lastMemberCounted: 0,
           executed: false
         }));
