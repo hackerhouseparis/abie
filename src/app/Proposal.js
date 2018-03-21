@@ -7,7 +7,7 @@ import AbieFund from '../../build/contracts/AbieFund.json'
 import '../www/styles/Proposal.scss'
 
 const TESTRPC_HOST = 'localhost'
-const TESTRPC_PORT = '8545'
+const TESTRPC_PORT = '9545'
 
 class Proposal extends Component {
 
@@ -63,13 +63,16 @@ class Proposal extends Component {
       .then(result => [...new Array(result.toNumber()).keys()])
       .then(range => (
         Promise.all(range.map(i => contract.proposals(i)))
-          .then(results => this.setState({ proposals: results }))
+          .then(results => {
+            this.setState({ proposals: results })
+            // console.log(proposals)
+        })
       ))
       .catch(err => console.error(err))
   }
 
   handleChange = field => ({ target: { value } }) => this.setState({ [field]: value })
-
+  
   setDelegate = () => {
     this.state.metaContract.at(this.state.addressContract)
       .then((contract) => contract.setDelegate(
@@ -112,6 +115,46 @@ class Proposal extends Component {
           gas: 4000000
         }
       )})
+      .then(result => {
+        console.log(result);
+        //Non subtle rerending of the full page
+        window.location.reload()
+      })
+      .catch(err => {
+        console.error(err);
+      })
+  }
+
+  voteYes = idx => {
+    this.state.metaContract.at(this.state.addressContract)
+      .then((contract) => {
+        return contract.vote(
+          idx,
+          1,
+        {
+          value: 0,
+          from: this.state.accounts[0],
+          gas: 4000000
+        }
+      )})
+      .then(result => console.log(result))
+      .catch(err => {
+        console.error(err);
+      })
+  }
+
+   voteNo = idx => {
+    this.state.metaContract.at(this.state.addressContract)
+      .then((contract) => {
+        return contract.vote(
+          idx,
+          2,
+        {
+          value: 0,
+          from: this.state.accounts[0],
+          gas: 4000000
+        }
+      )})
       .then(result => console.log(result))
       .catch(err => {
         console.error(err);
@@ -136,26 +179,31 @@ class Proposal extends Component {
           <input type="text" onChange={this.handleChange('name')} placeholder="Name of the proposition (hex)" />
           <input type="text" onChange={this.handleChangeRequestAmount} placeholder="Requested amount (Wei)" />
           <input type="text" onChange={this.handleChangeDescription} placeholder="Link IPFS" />
-          <button onClick={this.addProposal}>Submit add proposal</button>
+          <button onClick={this.addProposal}>Submit add proposal </button>
         </p>
+
         <p>
-          Proposals
+          Proposals 
         </p>
 
           {this.state.proposals.map(
             (obj, index) =>
               (
                 <ul key={index}>
-                  <li>name: {web3.toAscii(obj[0])}</li>
-                  <li>voteYes: {obj[1].toNumber()}</li>
-                  <li>voteYes: {obj[2].toNumber()}</li>
+                  <li>Proposal name: {web3.toAscii(obj[0])}</li>
                   <li>recipient: {obj[3].toString()}</li>
                   <li>value: {obj[4].toNumber()}</li>
                   <li>data: {'' + web3.toAscii(obj[5])}</li>
                   <li>proposalType: {obj[6].toNumber()}</li>
-                  <li>endDate: {obj[7].toNumber()}</li>
+                  <li>End Date: {new Date(obj[7].toNumber()).toLocaleTimeString()}</li>
+                  <li>VoteYes: {obj[1].toNumber()}    voteNo: {obj[2].toNumber()} (<i>Will be displayed once counted)</i></li>
                   <li>lastMemberCounted: {obj[8].toString()}</li>
                   <li>executed: {'' + obj[9]}</li>
+                  <li>
+                    <button style={{color: "green"}} onClick={() => this.voteYes(index)}>Vote Yes</button>
+                    &nbsp;
+                    <button style={{color: "red"}} onClick={() => this.voteNo(index)}>Vote No</button>
+                  </li>
                 </ul>
               )
           )}
