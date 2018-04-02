@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import request from 'superagent'
 import { default as Web3 } from 'web3'
 import { default as contract } from 'truffle-contract'
-import AbieFund from '../../build/contracts/AbieFund.json'
+import Abie from '../../build/contracts/Abie.json'
 
 import '../www/styles/Proposal.scss'
 
@@ -32,7 +32,7 @@ class Proposal extends Component {
       if (typeof web3 !== 'undefined') {
         // web3 = new Web3(web3.currentProvider);
         this.setState({web3: true})
-        let meta = contract(AbieFund)
+        let meta = contract(Abie)
         this.setState({metaContract: meta})
         let provider = new Web3.providers.HttpProvider(`http://${TESTRPC_HOST}:${TESTRPC_PORT}`)
         let metaCoinBalance = 0
@@ -72,7 +72,7 @@ class Proposal extends Component {
   }
 
   handleChange = field => ({ target: { value } }) => this.setState({ [field]: value })
-  
+
   setDelegate = () => {
     this.state.metaContract.at(this.state.addressContract)
       .then((contract) => contract.setDelegate(
@@ -183,7 +183,7 @@ class Proposal extends Component {
         </p>
 
         <p>
-          Proposals 
+          Proposals
         </p>
 
           {this.state.proposals.map(

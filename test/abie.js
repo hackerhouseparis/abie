@@ -1,16 +1,19 @@
-var AbieFund = artifacts.require("AbieFund")
-let m1, m2, m3, m4, candidate
-let abie // abie is an abstraction of the main contract "AbieFund.sol"
+var Abie = artifacts.require("Abie")
+let m1, m2, candidate
+let abie // abie is an abstraction of the main contract "Abie.sol"
 
-contract('AbieFund', (accounts)=> {
+contract('Abie', (accounts)=> {
   before(async ()=> {
-    abie = await AbieFund.deployed()
+    abie = await Abie.deployed()
     m1 = accounts[0]
     m2 = accounts[1]
-    m3 = accounts[2]
-    m4 = accounts[3]
-    candidate = accounts[4]
   })
+
+  /*
+
+  This test file needs to be reviewed.
+
+  **/
 
   it("m2 set delegate", async () => {
     await abie.setDelegate(0,m1,{from: m2})
@@ -37,6 +40,6 @@ contract('AbieFund', (accounts)=> {
     return abie.isValidMember(m1) // Without this line, I get a // "BigNumber Error: new BigNumber() not a number: [object Object]" and I don't know why ^^
     await abie.vote(1, {from: m1})
     const result = await abie.countAllVotes(0)
-    assert.equal(result, 1, "error during the vote")
+    assert.equal(result, 1, "error")
   })
 })

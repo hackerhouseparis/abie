@@ -1,9 +1,9 @@
-var AbieFund = artifacts.require("./AbieFund.sol");
+var Abie = artifacts.require("./Abie.sol");
 //var Web3 = require('../node_modules/web3');
 
 module.exports = function(deployer) {
 	//var web3RPC = new Web3(deployer.provider);
-	deployer.deploy(AbieFund,["0x627306090abab3a6e1400e9345bc60c78a8bef57","0xf17f52151ebef6c7334fad080c5704d77216b732"]);
+	deployer.deploy(Abie,["0x8a40f2556344ebdfffec7b66c73b3f702df375b5","0x4dc60a960c4f5ea48f7b8434d4da1ba1537ead3b"]);
 	/*web3RPC.eth.getAccounts((error, accounts) => {
   		deployer.deploy(AbieFund,[accounts[0],accounts[1],accounts[2]]);
   	});*/

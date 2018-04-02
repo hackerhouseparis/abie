@@ -113,12 +113,12 @@ contract Abie {
 
     /// Receive funds.
     function () payable public{
-        emit Donated(msg.sender, msg.value);
+        Donated(msg.sender, msg.value);
     }
 
     /// Ask for membership.
     function askMembership () payable public costs(membershipFee) {
-        emit Donated(msg.sender,msg.value); // Register the donation.
+         Donated(msg.sender,msg.value); // Register the donation.
 
         // Create a proposal to add the member.
         proposals.push(Proposal({
@@ -138,7 +138,7 @@ contract Abie {
 
     /// Add Proposal.
     function addProposal (bytes32 _name, uint _value, bytes32 _data) payable public costs(deposit) {
-        emit Donated(msg.sender,msg.value); // Register the donation.
+        Donated(msg.sender,msg.value); // Register the donation.
 
         // Create a proposal to add the member.
         proposals.push(Proposal({
@@ -247,8 +247,8 @@ contract Abie {
         require (isExecutable(proposalID)); // Si la proposal n'est pas exécutable, dégage.
         require(proposal.executed == false); // Si c'est déjà exécuté, dégage.
         require (beneficiary == msg.sender); // si pas bénéficiaire, dégage.
-        beneficiary.transfer(check); // The beneficiary gets the requested amount.
         proposal.executed = true; // The proposal was executed.
+        beneficiary.transfer(check); // The beneficiary gets the requested amount.
     }
 
     /// CONSTANTS ///
