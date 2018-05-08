@@ -8,28 +8,28 @@ Abie is a DAO that includes a voting system and a minimalist membership system r
 
 ## Test
 
-Make sure you have latest versions of [npm](https://www.npmjs.com/), [nodejs](https://nodejs.org/en/), [truffle](https://github.com/trufflesuite/truffle) and [testrpc](https://www.npmjs.com/package/ethereumjs-testrpc) installed, then launch testrpc:
+Make sure you have latest versions of [npm](https://www.npmjs.com/), [node](https://nodejs.org/en/), [truffle](https://github.com/trufflesuite/truffle) and [ganache](https://www.npmjs.com/package/ganache-cli) installed, then launch testrpc:
 ```
 testrpc
 ```
 In another window, go in your repository and:
 
 ```
-truffle compile
 truffle migrate
 truffle test
 ```
+### Versions
+
+* node v9.4.0
+* npm 5.7.1
+* Ganache CLI v6.1.0 (ganache-core: 2.1.0)
+* Truffle v4.0.5 (core: 4.0.5)
+* Solidity v0.4.18 (solc-js)
 
 ## Run
 
-Install package.json:
-
 ```
 npm i
-```
-Then:
-
-```
 npm start
 ```
 
