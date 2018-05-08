@@ -37,16 +37,16 @@ In your browser, you can now open the interface on port 3000:
 
 [http://localhost:3000](http://localhost:3000)
 
-## Next steps
+## Contrib
 
-* Add the `statementOfIntent` input at deployment 
-* Add the `name` input at deployment
-* Test setDelegate() in abie.js 
-* Test askForMembership() in abie.js 
-* Deploy a DAO to main net, donate 10 ETH and call for attacks
-* Measure the participation and relevancy rates
-* Create an explorer
-* Improve the interface
+* [Add the `statementOfIntent` input at deployment](https://github.com/AbieFund/abie/projects/1#card-9604673)
+* [Add the `name` input at deployment](https://github.com/AbieFund/abie/projects/1#card-9604684)
+* [Test setDelegate() in abie.js ](https://github.com/AbieFund/abie/projects/1#card-9604692)
+* [Test askForMembership() in abie.js ](https://github.com/AbieFund/abie/projects/1#card-9604696)
+* [Deploy a DAO to main net, donate 10 ETH and call for attacks](https://github.com/AbieFund/abie/projects/1#card-9604705)
+* [Measure the participation and relevancy rates](https://github.com/AbieFund/abie/projects/1#card-9604708)
+* [Create an explorer](https://github.com/AbieFund/abie/projects/1#card-9604722)
+* [Improve the interface](https://github.com/AbieFund/abie/projects/1#card-9604731)
 
 ## Resources
 
