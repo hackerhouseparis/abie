@@ -1,45 +1,80 @@
-var Abie = artifacts.require("Abie")
-let m1, m2, candidate
-let abie // abie is an abstraction of the main contract "Abie.sol"
+const Abie = artifacts.require("Abie")
 
 contract('Abie', (accounts)=> {
-  before(async ()=> {
-    abie = await Abie.deployed()
-    m1 = accounts[0]
-    m2 = accounts[1]
-  })
+  let member1 = accounts[0]
+  let member2 = accounts[1]
+  let donor1 = accounts[2]
+  let donor2 = accounts[3]
+  let beneficiary = accounts[4]
 
-  /*
+    // constructor
+    it("Abie is deployed", async () => {
+      let abie = await Abie.new([member1,member2])
+      let addr = abie.address
+      assert.equal(await abie.nbMembers(), 2, 'The deployment was NOT executed correctly.')
+    })
 
-  This test file needs to be reviewed.
+    it("The donors make a 2 ETH donation", async () => {
+      let abie = await Abie.new([member1,member2])
+      let donation = web3.toWei(1, 'ether')
+      let tx = await web3.eth.sendTransaction({from: donor1, to: abie.address, value: donation})
+      let tx2 = await web3.eth.sendTransaction({from: donor2, to: abie.address, value: donation})
+      let balance = await abie.contractBalance()
+      assert.equal(await abie.contractBalance(), web3.toWei(2, 'ether'), 'Something went wrong.')
+    })
 
-  **/
+    it("The beneficiary submits a proposal", async () => {
+      let abie = await Abie.new([member1,member2])
+      let donation = web3.toWei(1, 'ether')
+      let tx = await web3.eth.sendTransaction({from: donor1, to: abie.address, value: donation})
+      let tx2 = await web3.eth.sendTransaction({from: donor2, to: abie.address, value: donation})
+      await abie.addProposal(0x0, 500000000000000000, 0x0, {value: web3.toWei(0.1, "ether") ,from: beneficiary})
+      .then(result => abie.proposals.call(0))
+      .then(result => {
+        assert.equal(result[3], beneficiary, "can't submit")
+        return abie.nbProposalsFund()})
+      .then(result => assert.equal(result, 1, "can't submit"))
+    })
 
-  it("m2 set delegate", async () => {
-    await abie.setDelegate(0,m1,{from: m2})
-    .then(() => abie.getDelegate.call(m2,0))
-    .then(result => assert.equal(result, m1))
-  })
+    it("The members have voted", async () => {
+      let abie = await Abie.new([member1,member2])
+      let donation = web3.toWei(1, 'ether')
+      let tx = await web3.eth.sendTransaction({from: donor1, to: abie.address, value: donation})
+      let tx2 = await web3.eth.sendTransaction({from: donor2, to: abie.address, value: donation})
+      await abie.addProposal(0x0, 500000000000000000, 0x0, {value: web3.toWei(0.1, "ether") ,from: beneficiary})
+      await abie.vote(0,1, {from:member1})
+      await abie.vote(0,1, {from:member2})
+      const increaseTime = addSeconds => {
+        web3.currentProvider.send({
+            jsonrpc: "2.0",
+            method: "evm_increaseTime",
+            params: [addSeconds], id: 0
+        })
+      }
+      await increaseTime(20000)
+      await abie.countVotes(0,20)
+      let exec = await abie.isExecutable(0).then(result => assert.isTrue(result, "oh no"))
+    })
 
-  it("candidate ask for membership", async () => {
-    await abie.askMembership({value: web3.toWei(1, "ether") ,from: candidate})
-    .then(() => abie.proposals.call(0))
-    .then(result => assert.equal(result[3], candidate))
-  })
-
-  it("proposal is published", async () => {
-    await abie.addProposal(0x0, 1, 0x0, {value: web3.toWei(1, "ether") ,from: candidate})
-    .then(result => abie.proposals.call(0))
-    .then(result => {
-      assert.equal(result[3], candidate, "error add proposal")
-      return abie.nbProposalsFund()})
-    .then(result => assert.equal(result, 1, "error count proposals"))
-  })
-
-  it("test vote", async () => {
-    return abie.isValidMember(m1) // Without this line, I get a // "BigNumber Error: new BigNumber() not a number: [object Object]" and I don't know why ^^
-    await abie.vote(1, {from: m1})
-    const result = await abie.countAllVotes(0)
-    assert.equal(result, 1, "error")
-  })
+    it("The beneficiary takes the requested amount", async () => {
+      let abie = await Abie.new([member1,member2])
+      let donation = web3.toWei(1, 'ether')
+      let tx = await web3.eth.sendTransaction({from: donor1, to: abie.address, value: donation})
+      let tx2 = await web3.eth.sendTransaction({from: donor2, to: abie.address, value: donation})
+      await abie.addProposal(0x0, 500000000000000000, 0x0, {value: web3.toWei(0.1, "ether") ,from: beneficiary})
+      await abie.vote(0,1, {from:member1})
+      const increaseTime = addSeconds => {
+        web3.currentProvider.send({
+            jsonrpc: "2.0",
+            method: "evm_increaseTime",
+            params: [addSeconds], id: 0
+        })
+      }
+      await increaseTime(20000)
+      await abie.countVotes(0,20)
+      let exec = await abie.isExecutable(0)
+      let claim = await abie.claim(0,{from:beneficiary, value:web3.toWei(0.1, "ether")})
+      let bal = await abie.contractBalance()
+      assert.equal(bal, 1500000000000000000, "not the expected amount")
+    })
 })
