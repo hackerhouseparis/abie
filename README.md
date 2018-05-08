@@ -22,10 +22,12 @@ truffle test
 
 ## Run
 
+Install package.json:
+
 ```
 npm i
 ```
-Install all packages included in package.json, then:
+Then:
 
 ```
 npm start
@@ -44,6 +46,12 @@ In your browser, you can now open the interface on port 3000:
 * Deploy a DAO to main net, donate 10 ETH and call for attacks
 * Measure the participation and relevancy rates
 * Create an explorer
-* Improve the UI
+* Improve the interface
+
+## Resources
+
+* [Project Website](http://abie.fund/) 
+* [Using Abie with Remix (video)](https://youtu.be/NCzbua9R_eE)
+* [When you test Abie](https://imgur.com/a/m7fFvVi)
 
 Feel free to join the [Riot](https://riot.im/app/#/room/#abie:matrix.org) discussion chan!
