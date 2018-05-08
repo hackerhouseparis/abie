@@ -7,13 +7,11 @@ pragma solidity ^0.4.8;
 /// @title Fund for donations.
 contract Abie {
 
-    uint public membershipFee = 0.1 ether;
-    uint public deposit = 0.1 ether;
-    uint public trigger = 0.1 ether;
+    uint public fee = 0.1 ether;
     uint public nbMembers;
     uint public nbProposalsFund;
     uint public registrationTime = 1 years;
-    uint[2] public voteLength = [10 minutes, 10 minutes];
+    uint[2] public voteLength = [1 minutes, 1 minutes];
     uint MAX_DELEGATION_DEPTH=10;
     address NOT_COUNTED=0;
     address COUNTED=1;
@@ -117,7 +115,7 @@ contract Abie {
     }
 
     /// Ask for membership.
-    function askMembership () payable public costs(membershipFee) {
+    function askMembership () payable public costs(fee) {
          Donated(msg.sender,msg.value); // Register the donation.
 
         // Create a proposal to add the member.
@@ -129,7 +127,7 @@ contract Abie {
           value: 0x0,
           data: 0x0,
           proposalType: ProposalType.AddMember,
-              endDate: now + 5 minutes,
+              endDate: now + 1 minutes,
           //voteLength[uint256(ProposalType.AddMember)],
           lastMemberCounted: 0,
           executed: false
@@ -137,7 +135,7 @@ contract Abie {
     }
 
     /// Add Proposal.
-    function addProposal (bytes32 _name, uint _value, bytes32 _data) payable public costs(deposit) {
+    function addProposal (bytes32 _name, uint _value, bytes32 _data) payable public costs(fee) {
         Donated(msg.sender,msg.value); // Register the donation.
 
         // Create a proposal to add the member.
@@ -149,7 +147,7 @@ contract Abie {
           value: _value,
           data: _data,
           proposalType: ProposalType.FundProject,
-          endDate: now + 5 minutes,
+          endDate: now + 1 minutes,
           lastMemberCounted: 0,
           executed: false
         }));
@@ -198,7 +196,7 @@ contract Abie {
             address delegate=current;
             if(isValidMember(current)) {
                 uint depth=0;
-                // Seach the final vote.
+                // Search the final vote.
                 while (true){
                     VoteType voteNow = proposal.vote[delegate];
                     if (voteNow==VoteType.Abstain) { // Look at the delegate
@@ -238,12 +236,12 @@ contract Abie {
         addMember(proposal.recipient);
     }
 
-    // The following function has never been reviewed so far!
-    function Claim(uint proposalID) public payable costs(trigger) {
+    // The following function has NOT been reviewed so far.
+    function claim(uint proposalID) public payable costs(fee) {
         Proposal storage proposal = proposals[proposalID];
         address beneficiary = proposal.recipient;
         uint value = proposal.value;
-        uint check = trigger+deposit+value;
+        uint check = fee*2+value;
         require (isExecutable(proposalID)); // Si la proposal n'est pas exécutable, dégage.
         require(proposal.executed == false); // Si c'est déjà exécuté, dégage.
         require (beneficiary == msg.sender); // si pas bénéficiaire, dégage.
@@ -287,5 +285,10 @@ contract Abie {
 
     function contractBalance() public constant returns(uint256) {
         return address(this).balance;
+    }
+
+ function timeLeft(uint proposalID) public constant returns(uint256) {
+        Proposal storage proposal = proposals[proposalID];
+        return proposal.endDate - now;
     }
 }
