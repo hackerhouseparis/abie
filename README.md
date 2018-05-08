@@ -8,17 +8,18 @@ Abie is a DAO that includes a voting system and a minimalist membership system r
 
 ## Test
 
-Make sure you have latest versions of [npm](https://www.npmjs.com/), [node](https://nodejs.org/en/), [truffle](https://github.com/trufflesuite/truffle) and [ganache](https://www.npmjs.com/package/ganache-cli) installed, then launch testrpc:
+Make sure you have latest versions of [npm](https://www.npmjs.com/), [node](https://nodejs.org/en/), [truffle](https://github.com/trufflesuite/truffle) and [ganache](https://www.npmjs.com/package/ganache-cli) installed, then launch ganache-cli:
 ```
-testrpc
+ganache-cli
 ```
-In another window, go in your repository and:
+Open another window and:
 
 ```
+npm i
 truffle migrate
 truffle test
 ```
-### Versions
+#### Versions
 
 * node v9.4.0
 * npm 5.7.1
@@ -29,7 +30,6 @@ truffle test
 ## Run
 
 ```
-npm i
 npm start
 ```
 
@@ -51,6 +51,7 @@ In your browser, you can now open the interface on port 3000:
 ## Resources
 
 * [Project Website](http://abie.fund/) 
+* [Abie Wiki](https://github.com/AbieFund/abie/wiki)
 * [Using Abie with Remix (video)](https://youtu.be/NCzbua9R_eE)
 * [When you test Abie](https://imgur.com/a/m7fFvVi)
 
