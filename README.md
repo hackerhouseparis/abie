@@ -9,10 +9,19 @@ Abie is a DAO that includes a voting system and a minimalist membership system r
 ## Test
 
 Make sure you have latest versions of [npm](https://www.npmjs.com/), [node](https://nodejs.org/en/), [truffle](https://github.com/trufflesuite/truffle) and [ganache](https://www.npmjs.com/package/ganache-cli) installed, then launch ganache-cli:
+
 ```
 ganache-cli
 ```
-Open another window and:
+
+In a new window:
+
+```
+git clone https://github.com/AbieFund/abie.git
+cd abie
+```
+
+Then:
 
 ```
 npm i
