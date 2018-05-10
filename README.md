@@ -17,7 +17,7 @@ npm install -g ganache-cli
 Run it: 
 
 ```
-ganache-cli
+ganache-cli --port 9545
 ```
 
 In a new tab:
