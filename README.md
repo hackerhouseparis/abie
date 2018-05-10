@@ -11,22 +11,21 @@ Abie is a DAO that includes a voting system and a minimalist membership system r
 Make sure you have latest versions of [npm](https://www.npmjs.com/), [node](https://nodejs.org/en/), [truffle](https://github.com/trufflesuite/truffle) and [ganache](https://www.npmjs.com/package/ganache-cli) installed. Here's how install truffle and ganache:
 
 ```
-$ npm install -g truffle
-$ npm install -g ganache-cli
+npm install -g truffle
+npm install -g ganache-cli
 ```
 Run it: 
 
 ```
-$ ganache-cli
+ganache-cli
 ```
-Note: we use ganache for testing because we can't 'increase the time' of Ropsten. 
 
 In a new tab:
 
 ```
-$ git clone https://github.com/AbieFund/abie.git
-$ cd abie
-$ npm i
+git clone https://github.com/AbieFund/abie.git
+cd abie
+npm i
 $ truffle migrate
 $ truffle test
 ```
@@ -39,8 +38,6 @@ $ truffle test
 * Solidity v0.4.18 (solc-js)
 
 ## Run
-
-Open "2_deploy_contracts.js" (in the "migrations" folder), uncomment line 16 and comment lines 13, 17, 18, 19 and replace manually the 2 addresses with the public addresses provided by ganache-cli. 
 
 Then in a new tab: 
 
