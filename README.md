@@ -8,25 +8,27 @@ Abie is a DAO that includes a voting system and a minimalist membership system r
 
 ## Test
 
-Make sure you have latest versions of [npm](https://www.npmjs.com/), [node](https://nodejs.org/en/), [truffle](https://github.com/trufflesuite/truffle) and [ganache](https://www.npmjs.com/package/ganache-cli) installed, then launch ganache-cli:
+Make sure you have latest versions of [npm](https://www.npmjs.com/), [node](https://nodejs.org/en/), [truffle](https://github.com/trufflesuite/truffle) and [ganache](https://www.npmjs.com/package/ganache-cli) installed. Here's how install truffle and ganache:
 
 ```
-ganache-cli
+$ npm install -g truffle
+$ npm install -g ganache-cli
 ```
-
-In a new window:
-
-```
-git clone https://github.com/AbieFund/abie.git
-cd abie
-```
-
-Then:
+Run it: 
 
 ```
-npm i
-truffle migrate
-truffle test
+$ ganache-cli
+```
+Note: we use ganache for testing because we can't 'increase the time' of Ropsten. 
+
+In a new tab:
+
+```
+$ git clone https://github.com/AbieFund/abie.git
+$ cd abie
+$ npm i
+$ truffle migrate
+$ truffle test
 ```
 #### Versions
 
@@ -38,8 +40,12 @@ truffle test
 
 ## Run
 
+Open "2_deploy_contracts.js" (in the "migrations" folder), uncomment line 16 and comment lines 13, 17, 18, 19 and replace manually the 2 addresses with the public addresses provided by ganache-cli. 
+
+Then in a new tab: 
+
 ```
-npm start
+$ npm start
 ```
 
 In your browser, you can now open the interface on port 3000:  
