@@ -26,8 +26,8 @@ In a new tab:
 git clone https://github.com/AbieFund/abie.git
 cd abie
 npm i
-$ truffle migrate
-$ truffle test
+truffle migrate
+truffle test
 ```
 #### Versions
 
@@ -42,17 +42,17 @@ $ truffle test
 Then in a new tab: 
 
 ```
-$ npm start
+npm start
 ```
 
 In your browser, you can now open the interface on port 3000:  
 
 [http://localhost:3000](http://localhost:3000)
 
-## Contrib
+## To do
 
-* [Add the `statementOfIntent` input at deployment](https://github.com/AbieFund/abie/projects/1#card-9604673)
-* [Add the `name` input at deployment](https://github.com/AbieFund/abie/projects/1#card-9604684)
+* [Add a `statementOfIntent` input at deployment](https://github.com/AbieFund/abie/projects/1#card-9604673)
+* [Add a `name` input at deployment](https://github.com/AbieFund/abie/projects/1#card-9604684)
 * [Test setDelegate() in abie.js ](https://github.com/AbieFund/abie/projects/1#card-9604692)
 * [Test askForMembership() in abie.js ](https://github.com/AbieFund/abie/projects/1#card-9604696)
 * [Deploy a DAO to main net, donate 10 ETH and call for attacks](https://github.com/AbieFund/abie/projects/1#card-9604705)
