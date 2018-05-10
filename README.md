@@ -1,10 +1,14 @@
 # Abie
 
-Abie was first released on March 5th, 2017 under [MIT License](https://github.com/AbieFund/abie/blob/master/LICENSE) with the help of the Ethergency team.
+Abie was first released on March 5th, 2017 under [MIT License](https://github.com/AbieFund/abie/blob/master/LICENSE) with the help of the Ethergency team. 
 
 ## Intro
 
 Abie is a DAO that includes a voting system and a minimalist membership system resistant to Sybil attacks. Only the vote of the members can trigger a transaction to the beneficiary. The 'liquid democracy' allows members that don't have any device or Internet access to express their opinion on each incoming proposal.
+
+On [May-10-2018 01:58:02 PM +UTC](https://ropsten.etherscan.io/tx/0x76220369843ec5e7d612ccf3c2f07452e135ca606bf7a89e30b8b3e577a5774c), Abie has run as expected on Ropsten network. 
+
+It is deployed at [0xf03003f0f1ca38b8d26b8be44469aba51f31d9f3](https://ropsten.etherscan.io/address/0xf03003f0f1ca38b8d26b8be44469aba51f31d9f3). It has 2 members and holds 1 ETH.
 
 ## Test
 
