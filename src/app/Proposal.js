@@ -1,3 +1,4 @@
+
 import React, {Component} from 'react'
 import request from 'superagent'
 import { default as Web3 } from 'web3'
@@ -25,34 +26,37 @@ class Proposal extends Component {
     dataDeposit: '',
     proposals: [],
   }
-  componentDidMount() {
 
+  componentDidMount() {
+    let testAbie = ''
     setTimeout(() => {
       if (typeof web3 !== 'undefined') {
-        web3 = new Web3(web3.currentProvider);
-        let abie = contract(Abie)
-        this.setState({metaContract: abie})
+        // web3 = new Web3(web3.currentProvider);
+        this.setState({web3: true})
+        let meta = contract(Abie)
+        this.setState({metaContract: meta})
         let provider = new Web3.providers.HttpProvider(`http://${TESTRPC_HOST}:${TESTRPC_PORT}`)
-        abie.setProvider(provider)
+        meta.setProvider(provider)
         const web3RPC = new Web3(provider)
-        this.setState({web3RPC:true})
-
+        this.setState({web3RPC})
         // Get accounts.
         web3RPC.eth.getAccounts((err, acc) => {
           console.log(err)
           console.log("accounts :", acc)
           this.setState({accounts: acc})
-          return abie.deployed()
-          .then(contract => {
-            this.setState({addressContract:contract.address})
-            this.getProposals(contract)
-          }).catch(err => console.error(err))
+          return meta.deployed()
+            .then(contract => {
+              this.setState({addressContract: contract.address})
+              this.getProposals(contract)
+            })
+            .catch(err => console.error(err))
         })
       } else {
         alert("install Metamask or use Mist")
       }
     }, 1000)
   }
+
   getProposals = contract => {
     this.state.metaContract.at(this.state.addressContract)
       .then(contract => contract.nbProposalsFund())
@@ -161,7 +165,7 @@ class Proposal extends Component {
     return (
       <div id="container">
         <h1>Abie</h1>
-        <p>Balance: {this.state.balance}</p>
+        <p>Balance : {this.state.balance}</p>
         <p>
             Set Delegate <input type="text" onChange={this.handleChange('delegate')} />
             <button onClick={this.setDelegate}>Add address</button>
@@ -210,16 +214,3 @@ class Proposal extends Component {
 }
 
 export default Proposal
-
-// let x = abie.getDelegate("0xe0a355d84a03261de09bb751fef9052148cbc0ea")
-// web3.eth.sendTransaction({from: donor1, to: abie.address, value: donation})
-// console.log(x)
-//this.setState({accounts: acc})
-//return abie.deployed()
-//.then(contract => {
-//  this.setState({addressContract: contract.address})
-//  this.getProposals(contract)
-//  }).catch(err => console.error(err))
-//console.log("coucou")
-//return abie.deployed()
-//web3RPC.eth.new(0x596f,0x596f,["0x183d5029c3f5cdb637f8785efaa2c9bc18f25cf5","0xc26ca8a314922926085b59215cdd3af1f3f78b02"])
