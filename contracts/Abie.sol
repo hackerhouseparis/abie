@@ -1,17 +1,20 @@
 /* Part of this contract is from the solidity documentation
-Currently developed under the MIT License: https://github.com/AbieFund/abie/blob/master/LICENSE
+MIT License: https://github.com/AbieFund/abie/blob/master/LICENSE
 */
 
 pragma solidity ^0.4.8;
 
-/// @title Fund for donations.
+/// @title The easy fund
 contract Abie {
 
+    bytes32 public name;
+    bytes32 public statement;
     uint public fee = 0.1 ether;
     uint public nbMembers;
     uint public nbProposalsFund;
+    uint public nbMembershipReq;
     uint public registrationTime = 1 years;
-    uint[2] public voteLength = [1 minutes, 1 minutes];
+    uint[2] public voteLength = [2 minutes, 2 minutes];
     uint MAX_DELEGATION_DEPTH=10;
     address NOT_COUNTED=0;
     address COUNTED=1;
@@ -72,9 +75,13 @@ contract Abie {
         _;
     }
 
-
     /// @param initialMembers First members of the organization.
-    function Abie(address[] initialMembers) public{
+    /// @param _name The name of the DAO
+    /// @param _statement The statement of intent of the DAO
+    function Abie(bytes32 _name, bytes32 _statement, address[] initialMembers) public {
+
+        name=_name;
+        statement=_statement;
         for (uint i;i<initialMembers.length;++i){
             Member storage member=members[initialMembers[i]];
             member.registration=now;
@@ -95,6 +102,8 @@ contract Abie {
     // Add the member m to the member list.
     // Assume that there is at least 1 member registrated.
     function addMember(address m) private {
+        members[m].registration=now;
+        ++nbMembers;
         members[memberList.last].succ=m;
         members[m].prev=memberList.last;
         memberList.last=m;
@@ -127,11 +136,13 @@ contract Abie {
           value: 0x0,
           data: 0x0,
           proposalType: ProposalType.AddMember,
-              endDate: now + 1 minutes,
+          endDate: now + 2 minutes,
           //voteLength[uint256(ProposalType.AddMember)],
           lastMemberCounted: 0,
           executed: false
         }));
+
+        ++nbMembershipReq;
     }
 
     /// Add Proposal.
@@ -147,7 +158,7 @@ contract Abie {
           value: _value,
           data: _data,
           proposalType: ProposalType.FundProject,
-          endDate: now + 1 minutes,
+          endDate: now + 2 minutes,
           lastMemberCounted: 0,
           executed: false
         }));
@@ -234,6 +245,7 @@ contract Abie {
         require (isExecutable(proposalID)); // Proposal was not approved.
         proposal.executed=true; // The proposal will be executed.
         addMember(proposal.recipient);
+
     }
 
     // The following function has NOT been reviewed so far.
@@ -242,9 +254,10 @@ contract Abie {
         address beneficiary = proposal.recipient;
         uint value = proposal.value;
         uint check = fee*2+value;
-        require (isExecutable(proposalID)); // Si la proposal n'est pas exécutable, dégage.
-        require(proposal.executed == false); // Si c'est déjà exécuté, dégage.
-        require (beneficiary == msg.sender); // si pas bénéficiaire, dégage.
+        require (isExecutable(proposalID)); // rejected if not executable
+        require(proposal.executed == false); // rejected if executed already
+        require (beneficiary == msg.sender); // rejected if caller is not the beneficiary
+        proposal.executed = true; // The proposal is flagged ‘executed’.
         proposal.executed = true; // The proposal was executed.
         beneficiary.transfer(check); // The beneficiary gets the requested amount.
     }
